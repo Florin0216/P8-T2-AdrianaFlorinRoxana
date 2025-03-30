@@ -1,0 +1,5 @@
+ALTER TABLE users
+    ALTER COLUMN password TYPE VARCHAR(255) USING (password::VARCHAR(255));
+
+ALTER TABLE agents
+    ALTER COLUMN status DROP NOT NULL;

@@ -27,14 +27,13 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-
     @Bean
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http
         .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers("/", "/home", "/login", "/css/**", "/images/**", "/agent/create", "/station/view","/station/add"
-                        ,"/station/{id}/edit").permitAll()
+                        ,"/station/{id}/edit", "station/{id}/delete").permitAll()
                         .anyRequest().authenticated()
                 );
         return http.build();
