@@ -7,6 +7,7 @@ import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -21,13 +22,19 @@ public class SecurityConfig {
                 .build();
     }
 
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
 
     @Bean
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http
         .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                        .requestMatchers("/", "/home", "/login", "/css/**", "/images/**").permitAll()
+                        .requestMatchers("/", "/home", "/login", "/css/**", "/images/**", "/agent/create", "/station/view","/station/add"
+                        ,"/station/{id}/edit").permitAll()
                         .anyRequest().authenticated()
                 );
         return http.build();

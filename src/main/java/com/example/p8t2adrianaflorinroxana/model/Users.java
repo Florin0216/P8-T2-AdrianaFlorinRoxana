@@ -19,12 +19,12 @@ public class Users implements UserDetails {
     @Column(name = "username",nullable = false, length = 20)
     private String username;
 
-    @Column(name = "password",nullable = false, length = 20)
+    @Column(name = "password",nullable = false)
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "UsersRoles",
+            name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
@@ -45,4 +45,19 @@ public class Users implements UserDetails {
         return username;
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }
