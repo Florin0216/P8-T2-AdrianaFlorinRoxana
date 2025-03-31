@@ -139,4 +139,12 @@ public class Agents {
     public void setUser(Users user) {
         this.user = user;
     }
+
+    public Stations getStation() {
+        return station;
+    }
+
+    public void setStation(Stations station) {
+        this.station = station;
+    }
 }

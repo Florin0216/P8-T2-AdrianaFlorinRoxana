@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -38,17 +38,22 @@
             <a class="nav-link text-light" href="#">Pricing</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-light" href="/agent/create">Add agent</a>
-          </li>
-          <li class="nav-item">
             <a class="nav-link text-light" href="/station/view">Manage Stations</a>
           </li>
         </ul>
       </div>
       <div class="collapse navbar-collapse justify-content-end">
         <ul class="navbar-nav">
-          <li>
+          <li class="nav-item" sec:authorize="!isAuthenticated()">
             <a class="nav-link text-light" href="/login">Login</a>
+          </li>
+          <li class="nav-item" sec:authorize="isAuthenticated()">
+              <div class="nav-link text-light d-flex">
+                Welcome, <div sec:authentication="name" class="ms-1"></div>
+              </div>
+          </li>
+          <li class="nav-item" sec:authorize="isAuthenticated()">
+              <a class="nav-link text-light" href="/logout">Logout</a>
           </li>
         </ul>
       </div>
@@ -59,5 +64,6 @@
 </main>
 <footer>
 </footer>
+<script th:src="@{/js/script.js}"></script>
 </body>
 </html>

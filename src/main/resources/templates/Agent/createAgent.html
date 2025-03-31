@@ -12,7 +12,7 @@
                 <div class="card">
                     <div class="card-body p-4">
                         <h2 class="text-center mb-4 h4">Register New Agent</h2>
-                        <form th:object="${agent}" th:action="@{/agent/create}" method="post">
+                        <form th:object="${agent}" th:action="@{/agent/{stationId}/create(stationId=${stationId})}" method="post">
                             <div class="row">
                                 <div class="mb-3 col-md-6">
                                     <label for="username" class="form-label">Username:</label>

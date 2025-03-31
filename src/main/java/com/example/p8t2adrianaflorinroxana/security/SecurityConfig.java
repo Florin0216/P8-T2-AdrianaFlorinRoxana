@@ -17,8 +17,8 @@ public class SecurityConfig {
     @Bean
     static RoleHierarchy roleHierarchy() {
         return RoleHierarchyImpl.withDefaultRolePrefix()
-                .role("ADMIN").implies("INSPECTOR")
-                .role("INSPECTOR").implies("AGENT")
+                .role("ADMIN").implies("HEAD")
+                .role("HEAD").implies("AGENT")
                 .build();
     }
 
@@ -32,9 +32,13 @@ public class SecurityConfig {
         http
         .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                        .requestMatchers("/", "/home", "/login", "/css/**", "/images/**", "/agent/create", "/station/view","/station/add"
-                        ,"/station/{id}/edit", "station/{id}/delete").permitAll()
+                        .requestMatchers("/", "/login", "/css/**", "/images/**", "/agent/{stationId}/create", "/station/view","/station/add"
+                        ,"/station/{id}/edit", "/station/{id}/delete","/js/**").permitAll()
                         .anyRequest().authenticated()
+                )
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/")
                 );
         return http.build();
     }
