@@ -2,8 +2,11 @@ package com.example.p8t2adrianaflorinroxana.service;
 
 import com.example.p8t2adrianaflorinroxana.model.Agents;
 import com.example.p8t2adrianaflorinroxana.repository.AgentRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class AgentServiceImpl {
@@ -21,4 +24,12 @@ public class AgentServiceImpl {
         agentRepository.save(agent);
     }
 
+    public List<Agents> getAllAgentsForStation(long id){
+        return agentRepository.findByStation_Id(id);
+    }
+
+    @Transactional
+    public void deleteAgent(long id){
+        agentRepository.deleteById(id);
+    }
 }

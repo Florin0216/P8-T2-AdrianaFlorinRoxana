@@ -37,4 +37,10 @@ public class AgentController {
         return "redirect:/";
     }
 
+    @GetMapping("/{id}/delete")
+    public String deleteAgent(@PathVariable long id) {
+        agentService.deleteAgent(id);
+        return "redirect:/station/view";
+    }
+
 }

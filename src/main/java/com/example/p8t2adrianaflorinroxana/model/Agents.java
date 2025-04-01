@@ -23,7 +23,10 @@ public class Agents {
     @Column(name = "gender", nullable = false, length = 1)
     private String gender;
 
-    @Column(name = "rank", nullable = false, length = 20)
+    @Column(name = "corps", nullable = false, length = 30)
+    private String corps;
+
+    @Column(name = "rank", nullable = false, length = 30)
     private String rank;
 
     @Column(name = "status", length = 20)
@@ -41,7 +44,7 @@ public class Agents {
     @Column(name = "address", length = 30)
     private String address;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     @JoinColumn(name = "user_id")
     private Users user;
 
@@ -146,5 +149,13 @@ public class Agents {
 
     public void setStation(Stations station) {
         this.station = station;
+    }
+
+    public String getCorps() {
+        return corps;
+    }
+
+    public void setCorps(String corps) {
+        this.corps = corps;
     }
 }

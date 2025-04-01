@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{Shared/_Layout.html}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Station Hierarchy</title>
+</head>
+<body>
+<main layout:fragment="body">
+  <div class="pt-4">
+    <h1 class="mb-4 text-center pb-2 border-bottom" th:text="'Policemen of ' + ${station.stationName}"></h1>
+    <div th:if="${groupedAgents != null and !groupedAgents.isEmpty()}">
+      <div class="row">
+        <div class="col-sm-6 ps-5 border-end">
+          <div class="section-title mb-4 fw-bold fs-5">Officers</div>
+          <div th:each="rankName, iterStat : ${displayedOfficerRanks}">
+            <th:block th:with="rankAgents = ${groupedAgents.get('Officer')?.get(rankName)}">
+              <div th:if="${rankAgents != null and !rankAgents.isEmpty()}">
+                <div class="card position officer-card mb-3">
+                  <div class="card-header officer-header fw-bold d-flex justify-content-center align-items-center">
+                    <span th:text="${rankName}">Rank Name</span>
+                  </div>
+                  <div class="card-body p-0">
+                    <div class="table-responsive">
+                      <table class="table table-sm align-middle mb-0">
+                        <thead>
+                        <tr>
+                          <th scope="col">#</th>
+                          <th scope="col">Name</th>
+                          <th scope="col">Address</th>
+                          <th scope="col">Phone</th>
+                          <th scope="col">Email</th>
+                          <th scope="col">Status</th>
+                          <th scope="col" class="text-end">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="agent : ${rankAgents}">
+                          <td class="text-justify" th:text="${agent.id}"></td>
+                          <td class="text-justify" th:text="${agent.firstName} + ' ' + ${agent.lastName}"></td>
+                          <td class="text-justify" th:text="${agent.address}"></td>
+                          <td class="text-justify" th:text="${agent.phoneNumber}"></td>
+                          <td class="text-justify" th:text="${agent.email}"></td>
+                          <td class="text-justify" th:text="${agent.status}"></td>
+                          <td class="text-end">
+                            <div class="btn-group btn-group-sm" role="group">
+                              <a th:href="@{/agent/{id}/edit(id=${agent.id})}" class="btn btn-outline-primary" title="Edit Agent">
+                                <i class="fa-solid fa-pencil"></i>
+                              </a>
+                              <a th:href="@{/agent/{id}/delete(id=${agent.id})}" class="btn btn-outline-danger" title="Delete Agent"
+                                 onclick="return confirm('Are you sure you want to delete this agent?');">
+                                <i class="fa-solid fa-trash"></i>
+                              </a>
+                            </div>
+                          </td>
+                        </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <div th:if="${displayedOfficerRanks.size() > 1 and !iterStat.last}" class="connector"></div>
+              </div>
+            </th:block>
+          </div>
+        </div>
+        <div class="col-md-6 pe-5">
+          <div class="section-title agent mb-4 fw-bold fs-5">Agents</div>
+          <div th:each="rankName, iterStat : ${displayedAgentRanks}">
+            <th:block th:with="rankAgents = ${groupedAgents.get('Agent')?.get(rankName)}">
+              <div th:if="${rankAgents != null and !rankAgents.isEmpty()}">
+                <div class="card position agent-card mb-3">
+                  <div class="card-header agent-header fw-bold d-flex justify-content-center align-items-center">
+                    <span th:text="${rankName}">Rank Name</span>
+                  </div>
+                  <div class="card-body p-0">
+                    <div class="table-responsive">
+                      <table class="table table-sm align-middle mb-0">
+                        <thead>
+                        <tr>
+                          <th scope="col">#</th>
+                          <th scope="col">Name</th>
+                          <th scope="col">Address</th>
+                          <th scope="col">Phone</th>
+                          <th scope="col">Email</th>
+                          <th scope="col">Status</th>
+                          <th scope="col" class="text-end">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="agent : ${rankAgents}">
+                          <td class="text-justify" th:text="${agent.id}"></td>
+                          <td class="text-justify" th:text="${agent.firstName} + ' ' + ${agent.lastName}"></td>
+                          <td class="text-justify" th:text="${agent.address}"></td>
+                          <td class="text-justify" th:text="${agent.phoneNumber}"></td>
+                          <td class="text-justify" th:text="${agent.email}"></td>
+                          <td class="text-justify" th:text="${agent.status}"></td>
+                          <td class="text-end">
+                            <div class="btn-group btn-group-sm" role="group">
+                              <a th:href="@{/agent/{id}/edit(id=${agent.id})}" class="btn btn-outline-primary" title="Edit Agent">
+                                <i class="fa-solid fa-pencil"></i>
+                              </a>
+                              <a th:href="@{/agent/{id}/delete(id=${agent.id})}" class="btn btn-outline-danger" title="Delete Agent"
+                                 onclick="return confirm('Are you sure you want to delete this agent?');">
+                                <i class="fa-solid fa-trash"></i>
+                              </a>
+                            </div>
+                          </td>
+                        </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <div th:if="${displayedAgentRanks.size() > 1 and !iterStat.last}" class="connector"></div>
+              </div>
+            </th:block>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div th:if="${groupedAgents == null or groupedAgents.isEmpty()}" class="alert alert-warning mt-4" role="alert">
+      <i class="bi bi-exclamation-triangle-fill me-2"></i>No personnel data available for this station.
+    </div>
+  </div>
+</main>
+</body>
+</html>

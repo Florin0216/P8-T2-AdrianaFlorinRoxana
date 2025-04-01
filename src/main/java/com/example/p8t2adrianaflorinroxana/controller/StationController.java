@@ -1,21 +1,29 @@
 package com.example.p8t2adrianaflorinroxana.controller;
 
+import com.example.p8t2adrianaflorinroxana.model.Agents;
 import com.example.p8t2adrianaflorinroxana.model.Stations;
+import com.example.p8t2adrianaflorinroxana.service.AgentServiceImpl;
 import com.example.p8t2adrianaflorinroxana.service.StationServiceImpl;
+import com.example.p8t2adrianaflorinroxana.utils.HierarchyData;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.util.List;
+
+import static com.example.p8t2adrianaflorinroxana.utils.HierarchyData.organizeHierarchyData;
 
 @Controller
 @RequestMapping("/station")
 public class StationController {
 
     private final StationServiceImpl stationService;
+    private final AgentServiceImpl agentService;
 
-    public StationController(StationServiceImpl stationService) {
+    public StationController(StationServiceImpl stationService, AgentServiceImpl agentService) {
         this.stationService = stationService;
+        this.agentService = agentService;
     }
 
     @GetMapping("/view")
@@ -56,5 +64,18 @@ public class StationController {
 
         stationService.deleteStation(id);
         return "redirect:/station/view";
+    }
+
+    @GetMapping("/{id}/hierarchy")
+    public String showHierarchy(@PathVariable long id, Model model) {
+
+        Stations station = stationService.getStationById(id);
+        List<Agents> agents = agentService.getAllAgentsForStation(id);
+
+        HierarchyData hierarchyData = organizeHierarchyData(agents);
+        model.addAttribute("station", station);
+        model.addAllAttributes(hierarchyData.toModelAttributes());
+
+        return "Station/Hierarchy";
     }
 }

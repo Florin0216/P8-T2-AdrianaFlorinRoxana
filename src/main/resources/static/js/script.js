@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     '</b><br>' + station1.stationAddress + '<br>' +
                     '<div class="d-flex justify-content-between"> ' +
                     '<a href="/agent/' + station1.id + '/create" class="btn-primary">Add agent</a> ' +
-                    '<a href="" class="btn-primary" onclick="openAgentHierarchyModal()">View agent hierarchy</a> ' +
+                    '<a href="/station/' + station1.id + '/hierarchy" class="btn-primary">View agent hierarchy</a> ' +
                     '</div>'
                 );
             stationMarkers.addLayer(marker);
@@ -48,5 +48,48 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     } else {
         map.setView([stationData.defaultLocation.lat, stationData.defaultLocation.lng], 13);
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const corpsSelect = document.getElementById('corps');
+    const rankSelect = document.getElementById('rank');
+
+    if (corpsSelect && rankSelect) {
+        corpsSelect.addEventListener('change', function() {
+            while (rankSelect.options.length > 1) {
+                rankSelect.remove(1);
+            }
+
+            if (this.value === 'Officer') {
+                addRankOption(rankSelect, 'General-Quaestor', 'General-Quaestor');
+                addRankOption(rankSelect, 'Chief-Quaestor', 'Chief-Quaestor');
+                addRankOption(rankSelect, 'Principal Quaestor ', 'Principal Quaestor');
+                addRankOption(rankSelect, 'Quaestor', 'Quaestor');
+                addRankOption(rankSelect, 'Chief-Commissioner', 'Chief-Commissioner');
+                addRankOption(rankSelect, 'Commissioner', 'Commissioner');
+                addRankOption(rankSelect, 'Sub-Commissioner', 'Sub-Commissioner');
+                addRankOption(rankSelect, 'Principal Inspector', 'Principal Inspector');
+                addRankOption(rankSelect, 'Inspector', 'Inspector');
+                addRankOption(rankSelect, 'Sub-Inspector', 'Sub-Inspector');
+            } else if (this.value === 'Agent') {
+                addRankOption(rankSelect, 'Principal Chief Agent', 'Principal Chief Agent');
+                addRankOption(rankSelect, 'Chief Agent', 'Chief Agent');
+                addRankOption(rankSelect, 'Deputy Chief Agent', 'Deputy Chief Agent');
+                addRankOption(rankSelect, 'Principal Agent', 'Principal Agent');
+                addRankOption(rankSelect, 'Agent', 'Agent');
+            }
+        });
+
+        if (corpsSelect.value) {
+            corpsSelect.dispatchEvent(new Event('change'));
+        }
+    }
+
+    function addRankOption(selectElement, value, text) {
+        const option = document.createElement('option');
+        option.value = value;
+        option.text = text;
+        selectElement.add(option);
     }
 });
