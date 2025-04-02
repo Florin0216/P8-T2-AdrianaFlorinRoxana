@@ -62,21 +62,21 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             if (this.value === 'Officer') {
-                addRankOption(rankSelect, 'General-Quaestor', 'General-Quaestor');
-                addRankOption(rankSelect, 'Chief-Quaestor', 'Chief-Quaestor');
-                addRankOption(rankSelect, 'Principal Quaestor ', 'Principal Quaestor');
+                addRankOption(rankSelect, 'General_Quaestor', 'General-Quaestor');
+                addRankOption(rankSelect, 'Chief_Quaestor', 'Chief-Quaestor');
+                addRankOption(rankSelect, 'Principal_Quaestor ', 'Principal Quaestor');
                 addRankOption(rankSelect, 'Quaestor', 'Quaestor');
-                addRankOption(rankSelect, 'Chief-Commissioner', 'Chief-Commissioner');
+                addRankOption(rankSelect, 'Chief_Commissioner', 'Chief-Commissioner');
                 addRankOption(rankSelect, 'Commissioner', 'Commissioner');
-                addRankOption(rankSelect, 'Sub-Commissioner', 'Sub-Commissioner');
-                addRankOption(rankSelect, 'Principal Inspector', 'Principal Inspector');
+                addRankOption(rankSelect, 'Sub_Commissioner', 'Sub-Commissioner');
+                addRankOption(rankSelect, 'Principal_Inspector', 'Principal Inspector');
                 addRankOption(rankSelect, 'Inspector', 'Inspector');
-                addRankOption(rankSelect, 'Sub-Inspector', 'Sub-Inspector');
+                addRankOption(rankSelect, 'Sub_Inspector', 'Sub-Inspector');
             } else if (this.value === 'Agent') {
-                addRankOption(rankSelect, 'Principal Chief Agent', 'Principal Chief Agent');
-                addRankOption(rankSelect, 'Chief Agent', 'Chief Agent');
-                addRankOption(rankSelect, 'Deputy Chief Agent', 'Deputy Chief Agent');
-                addRankOption(rankSelect, 'Principal Agent', 'Principal Agent');
+                addRankOption(rankSelect, 'Principal_Chief_Agent', 'Principal Chief Agent');
+                addRankOption(rankSelect, 'Chief_Agent', 'Chief Agent');
+                addRankOption(rankSelect, 'Deputy_Chief_Agent', 'Deputy Chief Agent');
+                addRankOption(rankSelect, 'Principal_Agent', 'Principal Agent');
                 addRankOption(rankSelect, 'Agent', 'Agent');
             }
         });

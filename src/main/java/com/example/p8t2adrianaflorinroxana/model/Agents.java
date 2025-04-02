@@ -23,11 +23,13 @@ public class Agents {
     @Column(name = "gender", nullable = false, length = 1)
     private String gender;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "corps", nullable = false, length = 30)
-    private String corps;
+    private AgentCorps agentCorps;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "rank", nullable = false, length = 30)
-    private String rank;
+    private AgentRank agentRank;
 
     @Column(name = "status", length = 20)
     private String status;
@@ -87,14 +89,6 @@ public class Agents {
         this.gender = gender;
     }
 
-    public String getRank() {
-        return rank;
-    }
-
-    public void setRank(String rank) {
-        this.rank = rank;
-    }
-
     public String getStatus() {
         return status;
     }
@@ -151,11 +145,19 @@ public class Agents {
         this.station = station;
     }
 
-    public String getCorps() {
-        return corps;
+    public AgentCorps getCorps() {
+        return agentCorps;
     }
 
-    public void setCorps(String corps) {
-        this.corps = corps;
+    public void setCorps(AgentCorps agentCorps) {
+        this.agentCorps = agentCorps;
+    }
+
+    public AgentRank getRank() {
+        return agentRank;
+    }
+
+    public void setRank(AgentRank agentRank) {
+        this.agentRank = agentRank;
     }
 }

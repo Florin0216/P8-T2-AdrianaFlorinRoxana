@@ -1,18 +1,17 @@
 package com.example.p8t2adrianaflorinroxana.controller;
 
+import com.example.p8t2adrianaflorinroxana.model.AgentRank;
 import com.example.p8t2adrianaflorinroxana.model.Agents;
 import com.example.p8t2adrianaflorinroxana.model.Stations;
 import com.example.p8t2adrianaflorinroxana.service.AgentServiceImpl;
 import com.example.p8t2adrianaflorinroxana.service.StationServiceImpl;
-import com.example.p8t2adrianaflorinroxana.utils.HierarchyData;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 
-import java.util.List;
-
-import static com.example.p8t2adrianaflorinroxana.utils.HierarchyData.organizeHierarchyData;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/station")
@@ -67,14 +66,25 @@ public class StationController {
     }
 
     @GetMapping("/{id}/hierarchy")
-    public String showHierarchy(@PathVariable long id, Model model) {
+    public String showHierarchy(@PathVariable long id,
+                                @RequestParam(value = "corps", defaultValue = "Officer") String corps,
+                                Model model) {
 
         Stations station = stationService.getStationById(id);
         List<Agents> agents = agentService.getAllAgentsForStation(id);
 
-        HierarchyData hierarchyData = organizeHierarchyData(agents);
+        List<Agents> filteredAgents = agents.stream()
+                .filter(agent -> agent.getRank().getCorps().name().equalsIgnoreCase(corps)).sorted(Comparator.comparing(agent -> agent.getRank().ordinal())).collect(Collectors.toList());
+
+        Map<AgentRank, List<Agents>> agentsByRank = new TreeMap<>(Comparator.comparingInt(Enum::ordinal));
+        filteredAgents.forEach(agent ->
+                agentsByRank.computeIfAbsent(agent.getRank(), k -> new ArrayList<>()).add(agent)
+        );
+
         model.addAttribute("station", station);
-        model.addAllAttributes(hierarchyData.toModelAttributes());
+        model.addAttribute("agentsByRank", agentsByRank);
+        model.addAttribute("selectedCorps", corps);
+        model.addAttribute("allRanks", AgentRank.values());
 
         return "Station/Hierarchy";
     }
