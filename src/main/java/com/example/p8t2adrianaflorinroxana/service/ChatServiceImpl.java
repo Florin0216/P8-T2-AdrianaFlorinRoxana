@@ -16,4 +16,8 @@ public class ChatServiceImpl {
     public Chats create(Chats chat){
         return chatRepository.save(chat);
     }
+
+    public Chats getById(long id){
+        return chatRepository.findById(id).orElse(null);
+    }
 }

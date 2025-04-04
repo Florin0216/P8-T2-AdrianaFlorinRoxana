@@ -72,4 +72,20 @@ public class Messages {
     public void setFilePath(String filePath) {
         this.filePath = filePath;
     }
+
+    public Chats getChat() {
+        return chat;
+    }
+
+    public void setChat(Chats chat) {
+        this.chat = chat;
+    }
+
+    public Agents getSender() {
+        return sender;
+    }
+
+    public void setSender(Agents sender) {
+        this.sender = sender;
+    }
 }

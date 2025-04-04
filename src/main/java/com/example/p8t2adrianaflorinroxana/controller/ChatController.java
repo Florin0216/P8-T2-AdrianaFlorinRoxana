@@ -1,10 +1,12 @@
 package com.example.p8t2adrianaflorinroxana.controller;
 
 import com.example.p8t2adrianaflorinroxana.model.Chats;
+import com.example.p8t2adrianaflorinroxana.model.Messages;
 import com.example.p8t2adrianaflorinroxana.service.ChatServiceImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -30,5 +32,13 @@ public class ChatController {
 
         Chats newChat = chatService.create(chat);
         return "redirect:/chat/" + newChat.getId();
+    }
+
+    @GetMapping("/{id}")
+    public String showChat(@PathVariable long id, Model model){
+
+        model.addAttribute("message",new Messages());
+        model.addAttribute("chatId", id);
+        return "Chat/View";
     }
 }
