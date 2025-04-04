@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{Shared/_Layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Create chat</title>
+</head>
+<body>
+<main layout:fragment="body">
+    <div class="container pt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-7">
+                <div class="card">
+                    <div class="card-body p-4">
+                        <h2 class="text-center mb-4 h4">Create New Chat</h2>
+                        <form th:action="@{/chat/create}" method="post" th:object="${chat}">
+                            <div class="mb-3">
+                                <label for="chatType" class="form-label">Chat Type:</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa-solid fa-comments"></i></span>
+                                    <select class="form-select" th:field="*{type}" id="chatType" name="chatType" required>
+                                        <option value="" selected disabled>Select chat type</option>
+                                        <option value="single">1-On-1</option>
+                                        <option value="group">Group</option>
+                                        <option value="conference">Conference</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="reason" class="form-label">Reason (optional):</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa-solid fa-question-circle"></i></span>
+                                    <input type="text" class="form-control" th:field="*{reason}" id="reason" name="reason" placeholder="Enter reason">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="personalCode" class="form-label">Personal Code (optional):</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa-solid fa-key"></i></span>
+                                    <input type="text" class="form-control" th:field="*{personalCode}" id="personalCode" name="personalCode" placeholder="Enter personal code">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Create Chat</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{Shared/_Layout.html}">
+<head>
+  <title>Chat</title>
+</head>
+<body>
+<div layout:fragment="body">
+  <div id="chat">
+    <div id="messages"></div>
+    <label for="messageInput"></label>
+    <input type="text" id="messageInput" placeholder="Type your message..."/>
+    <button onclick="sendMessage()">Send</button>
+  </div>
+</div>
+</body>
+</html>

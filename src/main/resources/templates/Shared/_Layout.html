@@ -9,56 +9,62 @@
   <script src="https://kit.fontawesome.com/5d38f6ea9c.js" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.0/dist/sockjs.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
   <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
 <header>
-  <div class="row border-bottom border-dark">
-    <div class="col-md-4 p-1" style="background: blue"></div>
-    <div class="col-md-4 p-1" style="background: yellow"></div>
-    <div class="col-md-4 p-1" style="background: red"></div>
-  </div>
-  <nav class="navbar navbar-expand-lg" style="background: #006eb3">
-    <div class="container-fluid">
-      <a class="navbar-brand d-flex align-items-center" href="#">
-        <img src="/images/icon.png" alt="Logo" class="logo">
-      </a>
-      <div class="collapse navbar-collapse justify-content-center w-100" id="navbarNav">
-        <ul class="navbar-nav">
-          <li>
-            <a class="nav-link text-light" aria-current="page" href="/"><i class="fa-solid fa-house"></i></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-light" aria-current="page" href="#">Report a crime</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-light" href="#">Features</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-light" href="#">Pricing</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-light" href="/station/view">Manage Stations</a>
-          </li>
-        </ul>
-      </div>
-      <div class="collapse navbar-collapse justify-content-end">
-        <ul class="navbar-nav">
-          <li class="nav-item" sec:authorize="!isAuthenticated()">
-            <a class="nav-link text-light" href="/login">Login</a>
-          </li>
-          <li class="nav-item" sec:authorize="isAuthenticated()">
-              <div class="nav-link text-light d-flex">
-                Welcome, <div sec:authentication="name" class="ms-1"></div>
-              </div>
-          </li>
-          <li class="nav-item" sec:authorize="isAuthenticated()">
-              <a class="nav-link text-light" href="/logout">Logout</a>
-          </li>
-        </ul>
-      </div>
+  <div class="container-fluid">
+    <div class="row border-bottom border-dark">
+      <div class="col-md-4 p-1" style="background: blue"></div>
+      <div class="col-md-4 p-1" style="background: yellow"></div>
+      <div class="col-md-4 p-1" style="background: red"></div>
     </div>
-  </nav>
+    <div class="row">
+      <nav class="navbar navbar-expand-lg" style="background: #006eb3">
+        <div class="container-fluid">
+          <a class="navbar-brand d-flex align-items-center" href="#">
+            <img src="/images/icon.png" alt="Logo" class="logo">
+          </a>
+          <div class="collapse navbar-collapse justify-content-center w-100" id="navbarNav">
+            <ul class="navbar-nav">
+              <li>
+                <a class="nav-link text-light" aria-current="page" href="/"><i class="fa-solid fa-house"></i></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-light" aria-current="page" href="#">Report a crime</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-light" href="#">Features</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-light" href="#">Pricing</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-light" href="/station/view">Manage Stations</a>
+              </li>
+            </ul>
+          </div>
+          <div class="collapse navbar-collapse justify-content-end">
+            <ul class="navbar-nav">
+              <li class="nav-item" sec:authorize="!isAuthenticated()">
+                <a class="nav-link text-light" href="/login">Login</a>
+              </li>
+              <li class="nav-item" sec:authorize="isAuthenticated()">
+                <div class="nav-link text-light d-flex">
+                  Welcome, <div sec:authentication="name" class="ms-1"></div>
+                </div>
+              </li>
+              <li class="nav-item" sec:authorize="isAuthenticated()">
+                <a class="nav-link text-light" href="/logout">Logout</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </div>
 </header>
 <main layout:fragment="body">
 </main>
