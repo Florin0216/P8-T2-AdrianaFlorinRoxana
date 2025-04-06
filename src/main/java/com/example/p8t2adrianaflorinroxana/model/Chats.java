@@ -39,14 +39,14 @@ public class Chats {
     @Column(name = "personal_code")
     private String personalCode;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "agents_chats",
+            name = "users_chats",
             joinColumns = @JoinColumn(name = "chat_id"),
-            inverseJoinColumns = @JoinColumn(name = "agent_id"))
-    private List<Agents> agents;
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private List<Users> users;
 
-    @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Messages> messages;
 
     public Long getId() {
@@ -111,5 +111,13 @@ public class Chats {
 
     public void setPersonalCode(String personalCode) {
         this.personalCode = personalCode;
+    }
+
+    public List<Users> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<Users> users) {
+        this.users = users;
     }
 }

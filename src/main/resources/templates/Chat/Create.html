@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{Shared/_Layout.html}">
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{Shared/_Layout.html}">
 <head>
     <meta charset="UTF-8">
     <title>Create chat</title>
@@ -12,12 +14,12 @@
                 <div class="card">
                     <div class="card-body p-4">
                         <h2 class="text-center mb-4 h4">Create New Chat</h2>
-                        <form th:action="@{/chat/create}" method="post" th:object="${chat}">
+                        <form th:action="@{/chat/create}" th:object="${chat}" method="post">
                             <div class="mb-3">
                                 <label for="chatType" class="form-label">Chat Type:</label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="fa-solid fa-comments"></i></span>
-                                    <select class="form-select" th:field="*{type}" id="chatType" name="chatType" required>
+                                    <select th:field="*{type}" class="form-select" id="chatType" required onchange="toggleUserSelection()">
                                         <option value="" selected disabled>Select chat type</option>
                                         <option value="single">1-On-1</option>
                                         <option value="group">Group</option>
@@ -25,20 +27,32 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="mb-3">
-                                <label for="reason" class="form-label">Reason (optional):</label>
+
+                            <div class="mb-3 user-selection-section" id="singleUserSelection" >
+                                <label for="singleUser" class="form-label">Select Participant:</label>
                                 <div class="input-group">
-                                    <span class="input-group-text"><i class="fa-solid fa-question-circle"></i></span>
-                                    <input type="text" class="form-control" th:field="*{reason}" id="reason" name="reason" placeholder="Enter reason">
+                                    <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
+                                    <select class="form-select" id="singleUser" name="selectedUsers">
+                                        <option value="" selected disabled>Select a user</option>
+                                        <option th:each="user : ${allUsers}"
+                                                th:value="${user.id}"
+                                                th:text="${user.username}"></option>
+                                    </select>
                                 </div>
                             </div>
-                            <div class="mb-3">
-                                <label for="personalCode" class="form-label">Personal Code (optional):</label>
+
+                            <div class="mb-3 user-selection-section" id="multiUserSelection">
+                                <label for="multiUserSelect" class="form-label">Select Participants (Ctrl + Click):</label>
                                 <div class="input-group">
-                                    <span class="input-group-text"><i class="fa-solid fa-key"></i></span>
-                                    <input type="text" class="form-control" th:field="*{personalCode}" id="personalCode" name="personalCode" placeholder="Enter personal code">
+                                    <span class="input-group-text"><i class="fa-solid fa-users"></i></span>
+                                    <select class="form-select" id="multiUserSelect" name="selectedUsers" multiple>
+                                        <option th:each="user : ${allUsers}"
+                                                th:value="${user.id}"
+                                                th:text="${user.username}"></option>
+                                    </select>
                                 </div>
                             </div>
+
                             <button type="submit" class="btn btn-primary w-100">Create Chat</button>
                         </form>
                     </div>
@@ -46,6 +60,37 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function toggleUserSelection() {
+            const chatType = document.getElementById('chatType').value;
+            const singleUserSection = document.getElementById('singleUserSelection');
+            const multiUserSection = document.getElementById('multiUserSelection');
+            const singleUserSelect = document.getElementById('singleUser');
+            const multiUserSelect = document.getElementById('multiUserSelect');
+
+            singleUserSection.style.display = 'none';
+            multiUserSection.style.display = 'none';
+            singleUserSelect.required = false;
+            multiUserSelect.required = false;
+
+            if (chatType === 'single') {
+                singleUserSection.style.display = 'block';
+                singleUserSelect.required = true;
+                multiUserSelect.required = false;
+            } else if (chatType === 'group' || chatType === 'conference') {
+                multiUserSection.style.display = 'block';
+                multiUserSelect.required = true;
+                singleUserSelect.required = false;
+            } else {
+                singleUserSelect.required = false;
+                multiUserSelect.required = false;
+            }
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            toggleUserSelection();
+        });
+    </script>
 </main>
 </body>
 </html>

@@ -33,8 +33,8 @@ public class SecurityConfig {
         .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers("/", "/login", "/css/**", "/images/**", "/agent/{stationId}/create", "/station/view","/station/add"
-                        ,"/station/{id}/edit", "/station/{id}/delete","/station/{id}/hierarchy","/agent/{id}/delete" ,
-                                "/chat/**","/js/**","/ws/**","/topic/**").permitAll()
+                        ,"/station/{id}/edit", "/station/{id}/delete","/station/{id}/hierarchy","/agent/{id}/delete" , "/js/**").permitAll()
+                        .requestMatchers("/chat/**","/topic/**","/ws/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

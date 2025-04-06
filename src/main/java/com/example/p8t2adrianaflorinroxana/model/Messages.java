@@ -30,8 +30,8 @@ public class Messages {
     private Chats chat;
 
     @ManyToOne
-    @JoinColumn(name = "agent_id")
-    private Agents sender;
+    @JoinColumn(name = "user_id")
+    private Users sender;
 
     public Long getId() {
         return id;
@@ -81,11 +81,11 @@ public class Messages {
         this.chat = chat;
     }
 
-    public Agents getSender() {
+    public Users getSender() {
         return sender;
     }
 
-    public void setSender(Agents sender) {
+    public void setSender(Users sender) {
         this.sender = sender;
     }
 }

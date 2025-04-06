@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{Shared/_Layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Listed chats</title>
+</head>
+<body>
+<main layout:fragment="body">
+    <div class="container mt-4">
+        <h2 class="mb-4">Your Chats</h2>
+
+        <div th:if="${userChats == null}" class="alert alert-info">
+            You don't have any chats yet. Start a new conversation!
+        </div>
+
+        <div class="list-group">
+            <a th:each="chat : ${userChats}"
+               th:href="@{/chat/{id}(id=${chat.id})}"
+               class="list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1" th:text="${chat.id} ?: 'Unnamed Chat'">Chat Name</h5>
+                </div>
+                <p class="mb-1" th:text="${chat.type == 'single' ? 'Private chat' : 'Group chat'}">
+                    Chat type
+                </p>
+                <small th:text="${'Participants: ' + chat.users.size()}">Participants count</small>
+            </a>
+        </div>
+
+        <div class="mt-3">
+            <a th:href="@{/chat/create}" class="btn btn-primary">Start New Chat</a>
+        </div>
+    </div>
+</main>
+</body>
+</html>
