@@ -32,8 +32,31 @@ public class SecurityConfig {
         http
         .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                        .requestMatchers("/", "/login", "/css/**", "/images/**", "/agent/{stationId}/create", "/station/view","/station/add"
-                        ,"/station/{id}/edit", "/station/{id}/delete","/station/{id}/hierarchy","/agent/{id}/delete" ,"/js/**").permitAll()
+                        .requestMatchers(
+                                "/",
+                                "/login",
+                                "/css/**",
+                                "/images/**",
+                                "/agent/{stationId}/create",
+                                "/station/view",
+                                "/station/add",
+                                "/station/{id}/edit",
+                                "/station/{id}/delete",
+                                "/station/{id}/hierarchy",
+                                "/agent/{id}/delete" ,
+                                "/js/**",
+                                "/resource/view",
+                                "/resource/add",
+                                "/resource/{id}/edit",
+                                "/resource/{id}/delete",
+                                "/resource/{id}/assignAgent",
+                                "/resource/{id}/assignStation",
+                                "/resource/{id}/unassign",
+                                "/resource/{id}/scheduleMaintenance",
+                                "/resource/{id}/completeMaintenance",
+                                "/resource/**",
+                                "/agent/**"
+                        ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

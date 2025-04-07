@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{Shared/_Layout.html}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Resource Management</title>
+</head>
+<body>
+<main layout:fragment="body">
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Resource Management</h1>
+            <a th:href="@{/resource/add}" class="btn btn-primary">
+                <i class="fa-solid fa-plus"></i> Add New Resource
+            </a>
+        </div>
+
+        <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+        <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Assigned To</th>
+                    <th>Maintenance</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="resource : ${resources}">
+                    <td th:text="${resource.id}"></td>
+                    <td th:text="${resource.resourceName}"></td>
+                    <td th:text="${resource.resourceType}"></td>
+                    <td>
+                        <span th:switch="${resource.status}" class="badge">
+                            <span th:case="'AVAILABLE'" class="badge bg-success">Available</span>
+                            <span th:case="'IN_USE'" class="badge bg-primary">In Use</span>
+                            <span th:case="'UNDER_MAINTENANCE'" class="badge bg-warning text-dark">Under Maintenance</span>
+                            <span th:case="*" th:text="${resource.status}" class="badge bg-secondary"></span>
+                        </span>
+                    </td>
+                    <td>
+                        <span th:if="${resource.assignedAgent != null}">
+                            Agent: <span th:text="${resource.assignedAgent.firstName + ' ' + resource.assignedAgent.lastName}"></span>
+                        </span>
+                        <span th:if="${resource.assignedStation != null}">
+                            Station: <span th:text="${resource.assignedStation.stationName}"></span>
+                        </span>
+                        <span th:if="${resource.assignedAgent == null && resource.assignedStation == null}">
+                            Unassigned
+                        </span>
+                    </td>
+                    <td>
+                        <span th:if="${resource.maintenanceDate != null}">
+                            <span th:text="${resource.maintenanceDate}"></span> at
+                            <span th:text="${resource.maintenanceTime}"></span>
+                        </span>
+                        <span th:unless="${resource.maintenanceDate != null}">
+                            -
+                        </span>
+                    </td>
+                    <td>
+                        <div class="btn-group" role="group">
+                            <a th:href="@{/resource/{id}/edit(id=${resource.id})}" class="btn btn-sm btn-warning">
+                                <i class="fa-solid fa-pencil"></i> Edit
+                            </a>
+                            <a th:href="@{/resource/{id}/delete(id=${resource.id})}" class="btn btn-sm btn-danger"
+                               onclick="return confirm('Are you sure you want to delete this resource?');">
+                                <i class="fa-solid fa-trash"></i> Delete
+                            </a>
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-sm btn-info dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fa-solid fa-gear"></i> Manage
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li th:if="${resource.assignedAgent == null && resource.assignedStation == null}">
+                                        <a class="dropdown-item" th:href="@{/resource/{id}/assignAgent(id=${resource.id})}">
+                                            <i class="fa-solid fa-user"></i> Assign to Agent
+                                        </a>
+                                    </li>
+                                    <li th:if="${resource.assignedAgent == null && resource.assignedStation == null}">
+                                        <a class="dropdown-item" th:href="@{/resource/{id}/assignStation(id=${resource.id})}">
+                                            <i class="fa-solid fa-building"></i> Assign to Station
+                                        </a>
+                                    </li>
+                                    <li th:if="${resource.assignedAgent != null || resource.assignedStation != null}">
+                                        <a class="dropdown-item" th:href="@{/resource/{id}/unassign(id=${resource.id})}">
+                                            <i class="fa-solid fa-unlink"></i> Unassign
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" th:href="@{/resource/{id}/scheduleMaintenance(id=${resource.id})}">
+                                            <i class="fa-solid fa-screwdriver-wrench"></i> Schedule Maintenance
+                                        </a>
+                                    </li>
+                                    <li th:if="${resource.maintenanceDate != null}">
+                                        <a class="dropdown-item" th:href="@{/resource/{id}/completeMaintenance(id=${resource.id})}">
+                                            <i class="fa-solid fa-check"></i> Complete Maintenance
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+</body>
+</html>

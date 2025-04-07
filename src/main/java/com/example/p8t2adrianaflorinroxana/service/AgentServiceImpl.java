@@ -32,4 +32,8 @@ public class AgentServiceImpl {
     public void deleteAgent(long id){
         agentRepository.deleteById(id);
     }
+
+    public List<Agents> getAllAgents() {
+        return agentRepository.findAll();
+    }
 }

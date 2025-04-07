@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{Shared/_Layout.html}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Schedule Maintenance</title>
+</head>
+<body>
+<main layout:fragment="body">
+    <div class="container pt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-7">
+                <div class="card">
+                    <div class="card-body p-4">
+                        <h2 class="text-center mb-4 h4">Schedule Maintenance</h2>
+                        <div class="alert alert-info mb-4">
+                            You are scheduling maintenance for: <strong th:text="${resource.resourceName}"></strong>
+                        </div>
+                        <form th:action="@{/resource/{id}/scheduleMaintenance(id=${resource.id})}" method="post">
+                            <div class="row">
+                                <div class="mb-3 col-md-6">
+                                    <label for="maintenanceDate" class="form-label">Date:</label>
+                                    <input type="date" class="form-control" id="maintenanceDate" name="maintenanceDate" required>
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                    <label for="maintenanceTime" class="form-label">Time:</label>
+                                    <input type="time" class="form-control" id="maintenanceTime" name="maintenanceTime" required>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between mt-4">
+                                <a th:href="@{/resource/view}" class="btn btn-secondary">Cancel</a>
+                                <button type="submit" class="btn btn-primary">Schedule Maintenance</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

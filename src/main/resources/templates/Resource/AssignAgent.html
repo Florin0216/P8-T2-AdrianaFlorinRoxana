@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{Shared/_Layout.html}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Assign Resource to Agent</title>
+</head>
+<body>
+<main layout:fragment="body">
+    <div class="container pt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-7">
+                <div class="card">
+                    <div class="card-body p-4">
+                        <h2 class="text-center mb-4 h4">Assign Resource to Agent</h2>
+                        <div class="alert alert-info mb-4">
+                            You are assigning: <strong th:text="${resource.resourceName}"></strong>
+                        </div>
+                        <form th:action="@{/resource/{id}/assignAgent(id=${resource.id})}" method="post">
+                            <div class="mb-3">
+                                <label for="agentId" class="form-label">Select Agent:</label>
+                                <select class="form-select" id="agentId" name="agentId" required>
+                                    <option value="">Select an agent</option>
+                                    <option th:each="agent : ${agents}"
+                                            th:value="${agent.id}"
+                                            th:text="${agent.firstName + ' ' + agent.lastName + ' (' + agent.rank + ')'}">
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="d-flex justify-content-between mt-4">
+                                <a th:href="@{/resource/view}" class="btn btn-secondary">Cancel</a>
+                                <button type="submit" class="btn btn-primary">Assign to Agent</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

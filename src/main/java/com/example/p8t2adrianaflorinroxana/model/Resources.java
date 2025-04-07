@@ -25,11 +25,11 @@ public class Resources {
     @Column(name = "status", nullable = false, length = 20)
     private String status;
 
-    @Column(name = "maintenace_date", nullable = false)
+    @Column(name = "maintenace_date", nullable = true)
     private LocalDate maintenanceDate;
 
-    @Column(name = "maintenace_time", nullable = false)
-    private LocalTime maintenaceTime;
+    @Column(name = "maintenace_time", nullable = true)
+    private LocalTime maintenanceTime;
 
     @ManyToOne
     @JoinColumn(name = "agent_id")
@@ -38,4 +38,80 @@ public class Resources {
     @ManyToOne
     @JoinColumn(name = "station_id")
     private Stations station;
+
+    public Resources() {
+
+    }
+
+    public Resources(String resourceName, String resourceType, String status) {
+        this.resourceName = resourceName;
+        this.resourceType = resourceType;
+        this.status = status;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getResourceName() {
+        return resourceName;
+    }
+
+    public void setResourceName(String resourceName) {
+        this.resourceName = resourceName;
+    }
+
+    public String getResourceType() {
+        return resourceType;
+    }
+
+    public void setResourceType(String resourceType) {
+        this.resourceType = resourceType;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public LocalDate getMaintenanceDate() {
+        return maintenanceDate;
+    }
+
+    public void setMaintenanceDate(LocalDate maintenanceDate) {
+        this.maintenanceDate = maintenanceDate;
+    }
+
+    public LocalTime getMaintenanceTime()
+    {
+        return maintenanceTime;
+    }
+
+    public void setMaintenanceTime(LocalTime maintenanceTime) {
+        this.maintenanceTime = maintenanceTime;
+    }
+
+    public Agents getAssignedAgent() {
+        return agent;
+    }
+
+    public void setAssignedAgent(Agents assignedAgent) {
+        this.agent = assignedAgent;
+    }
+
+    public Stations getAssignedStation() {
+        return station;
+    }
+
+    public void setAssignedStation(Stations assignedStation) {
+        this.station = assignedStation;
+    }
+
 }
