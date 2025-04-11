@@ -15,23 +15,34 @@
                         <h5 class="mb-0">Chat Room ID: <span th:text="${chatId}"></span></h5>
                     </div>
                     <div class="card-body">
-                        <div class="overflow-auto mb-3 chat-container border-bottom border-dark-subtle">
+                        <div class="mb-3 overflow-auto chat-container border-bottom border-dark-subtle ps-3 pe-3">
                             <div class="mb-2 " th:each="message : ${pastMessages}"
                                  th:classappend="${message.sender.username == username ? 'd-flex justify-content-end' : 'd-flex justify-content-start'}">
                                 <div class="p-2 rounded"
                                      th:classappend="${message.sender.username == username ? 'bg-primary text-white' : 'bg-light'}">
-                                    <div class="fw-bold" th:if="${message.sender.username != username}"
+                                    <div class="fw-bold"
+                                         th:if="${message.sender.username != username && !thisChat.type.equals('single')}"
                                          th:text="${message.sender.username}"></div>
-                                    <div th:text="${message.text}"></div>
+                                    <th:block th:if="${message.filePath}">
+                                        <a th:href="${message.filePath}"
+                                           th:text="${message.text}"
+                                           download=""
+                                           th:classappend="${message.sender.username == username} ? 'text-white' : ''"></a>
+                                    </th:block>
+                                    <th:block th:unless="${message.filePath}" th:text="${message.text}"></th:block>
                                 </div>
                             </div>
                             <div id="messages">
                             </div>
                         </div>
-                        <div class="input-group bg-dark-subtle">
-                            <input type="text" id="messageInput" class="form-control" placeholder="Type your message..."
+                        <div class="input-group mb-2">
+                            <input type="text" id="messageInput" class="form-control rounded-start-pill" placeholder="Type your message..."
                                    aria-label="Message Input">
                             <button class="btn btn-primary" type="button" onclick="sendMessage()">Send</button>
+                        </div>
+                        <div class="input-group">
+                            <input type="file" id="fileInput" class="form-control rounded-start-pill" aria-label="File Input">
+                            <button class="btn btn-outline-primary" type="button" onclick="sendFile()">Upload</button>
                         </div>
                     </div>
                 </div>
@@ -59,20 +70,53 @@
                 stompClient.subscribe('/topic/messages', function (message) {
                     showMessage(JSON.parse(message.body));
                 });
+                markMessagesAsRead();
             });
+        }
+
+        function markMessagesAsRead() {
+            if (stompClient) {
+                stompClient.send("/app/chat/markRead/" + chatId, {}, {});
+            }
         }
 
         function sendMessage() {
             let messageContent = messageInput.value;
+
+            if(!messageContent) {
+                alert('Please enter a message');
+                return;
+            }
+
             stompClient.send("/app/chat/sendMessage/" + chatId, {}, JSON.stringify({'text': messageContent}));
             messageInput.value = '';
+        }
+
+        function sendFile() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+
+            const formData = new FormData();
+            formData.append("file", file);
+
+            fetch("/upload-files", {
+                method: "POST",
+                body: formData
+            })
+
+            const filePath = "/download?fileName=" + encodeURIComponent(file.name);
+            stompClient.send("/app/chat/sendMessage/" + chatId, {}, JSON.stringify({
+                'text': file.name,
+                'filePath': filePath
+            }));
+            fileInput.value = '';
         }
 
 
         function showMessage(message) {
             const messageContainer = document.createElement('div');
-            const contentElement = document.createElement('div');
             const boxElement = document.createElement('div');
+            const contentElement = document.createElement('div');
 
             const isOwnMessage = message.sender.username === username;
 
@@ -83,7 +127,19 @@
                 boxElement.appendChild(senderElement);
             }
 
-            contentElement.appendChild(document.createTextNode(message.text));
+            if (message.filePath) {
+                const link = document.createElement('a');
+                link.href = "/download?fileName=" + encodeURIComponent(message.text);
+                link.download = "";
+                link.textContent = message.text;
+                if (isOwnMessage) {
+                    link.classList.add('text-white');
+                }
+                contentElement.appendChild(link);
+            } else {
+                contentElement.appendChild(document.createTextNode(message.text));
+            }
+
             boxElement.appendChild(contentElement);
 
             if (isOwnMessage) {

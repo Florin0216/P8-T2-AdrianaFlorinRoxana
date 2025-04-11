@@ -28,7 +28,6 @@ public class ChatController {
         this.messageRepository = messageRepository;
     }
 
-
     @GetMapping("/create")
     public String createForm(Model model, Principal principal) {
 
@@ -50,10 +49,24 @@ public class ChatController {
         List<Users> users = new ArrayList<>();
         users.add(loggedUser);
 
-        if(chat.getType().equals("single") && selectedUser != null) {
+        if (chat.getType().equals("single") && selectedUser != null) {
+            List<Chats> userChats = chatService.getAllChatsForUser(loggedUser);
+            for (Chats existingChat : userChats) {
+                if (existingChat.getType().equals("single")
+                        && existingChat.getUsers().contains(userService.getUserById(selectedUser))
+                        && existingChat.getUsers().size() == 2) {
+
+                    return "redirect:/chat/" + existingChat.getId();
+                }
+            }
             users.add(userService.getUserById(selectedUser));
-        }else if(chat.getType().equals("group") && selectedUsers != null) {
-            for(Long selectedUserId : selectedUsers) {
+        } else if (chat.getType().equals("group") && selectedUsers != null) {
+            for (Long selectedUserId : selectedUsers) {
+                users.add(userService.getUserById(selectedUserId));
+            }
+        } else if (chat.getType().equals("conference") && selectedUsers != null) {
+            chat.setStatus("scheduled");
+            for (Long selectedUserId : selectedUsers) {
                 users.add(userService.getUserById(selectedUserId));
             }
         }
@@ -69,10 +82,11 @@ public class ChatController {
         Chats thisChat = chatService.getById(id);
         List<Messages> pastMessages = messageRepository.findMessagesByChat_Id(id);
 
-        if(!thisChat.getUsers().contains(userService.getUserByUsername(principal.getName()))) {
+        if (!thisChat.getUsers().contains(userService.getUserByUsername(principal.getName()))) {
             return "redirect:/chat/show";
         }
 
+        model.addAttribute("thisChat", thisChat);
         model.addAttribute("username", principal.getName());
         model.addAttribute("pastMessages", pastMessages);
         model.addAttribute("chatId", id);
@@ -80,11 +94,31 @@ public class ChatController {
     }
 
     @GetMapping("/show")
-    public String showChats(Model model, Principal principal) {
+    public String showChats(Model model,
+                            Principal principal,
+                            @RequestParam(name = "type", defaultValue = "single")String type) {
 
         Users loggedUser = userService.getUserByUsername(principal.getName());
-        List<Chats> userChats = chatService.getAllChatsForUser(loggedUser);
+        List<Chats> userChats = chatService.getAllChatsExceptConferences(loggedUser);
         model.addAttribute("userChats", userChats);
+        model.addAttribute("status", type);
         return "Chat/ListedChats";
+    }
+
+    @GetMapping("/{id}/verify")
+    public String verifyChat(@PathVariable("id") Long id, Model model) {
+
+        model.addAttribute("chatId", id);
+        return "Chat/Verify";
+    }
+
+    @PostMapping("/{id}/verify")
+    public String verifyChat(@PathVariable("id") Long id, @RequestParam("code") String code) {
+
+        Chats thisChat = chatService.getById(id);
+        if (!thisChat.getPersonalCode().equals(code)) {
+            return "redirect:/chat/"+ id +"/verify";
+        }
+        return "redirect:/chat/" + thisChat.getId();
     }
 }

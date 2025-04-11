@@ -19,7 +19,7 @@ public class Messages {
     @Column(name = "sent_at", nullable = false)
     private LocalTime sentAt;
 
-    @Column(name = "read_at", nullable = false)
+    @Column(name = "read_at")
     private LocalTime readAt;
 
     @Column(name = "file_path")

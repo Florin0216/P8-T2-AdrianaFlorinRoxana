@@ -39,6 +39,12 @@ public class Chats {
     @Column(name = "personal_code")
     private String personalCode;
 
+    @Column(name = "is_recurring")
+    private String isRecurring;
+
+    @Column(name = "recurrence")
+    private String recurrence;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_chats",
@@ -119,5 +125,22 @@ public class Chats {
 
     public void setUsers(List<Users> users) {
         this.users = users;
+    }
+
+
+    public String getRecurrence() {
+        return recurrence;
+    }
+
+    public void setRecurrence(String recurrence) {
+        this.recurrence = recurrence;
+    }
+
+    public String getIsRecurring() {
+        return isRecurring;
+    }
+
+    public void setIsRecurring(String isRecurring) {
+        this.isRecurring = isRecurring;
     }
 }

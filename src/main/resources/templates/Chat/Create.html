@@ -32,7 +32,7 @@
                                 <label for="singleUser" class="form-label">Select Participant:</label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
-                                    <select class="form-select" id="singleUser" name="selectedUsers">
+                                    <select class="form-select" id="singleUser" name="selectedUser">
                                         <option value="" selected disabled>Select a user</option>
                                         <option th:each="user : ${allUsers}"
                                                 th:value="${user.id}"
@@ -43,16 +43,70 @@
 
                             <div class="mb-3 user-selection-section" id="multiUserSelection">
                                 <label for="multiUserSelect" class="form-label">Select Participants (Ctrl + Click):</label>
-                                <div class="input-group">
+                                <div class="input-group mb-3" >
                                     <span class="input-group-text"><i class="fa-solid fa-users"></i></span>
-                                    <select class="form-select" id="multiUserSelect" name="selectedUsers" multiple>
+                                    <select class="form-select overflow-auto" id="multiUserSelect" name="selectedUsers" style="max-height: 40px;" multiple>
                                         <option th:each="user : ${allUsers}"
                                                 th:value="${user.id}"
                                                 th:text="${user.username}"></option>
                                     </select>
                                 </div>
                             </div>
-
+                            <div class="mb-3 user-selection-section" id="conferenceSelection">
+                                <label for="conferenceReason" class="form-label">Reason:</label>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text"><i class="fa-regular fa-circle-question"></i></span>
+                                    <input type="text" th:field="*{reason}" class="form-control" id="conferenceReason" placeholder="Enter Reason"/>
+                                </div>
+                                <label for="conferenceCode" class="form-label">Personal code:</label>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text"><i class="fa-solid fa-hashtag"></i></span>
+                                    <input type="text" th:field="*{personalCode}" class="form-control" id="conferenceCode" placeholder="Enter Personal code"/>
+                                </div>
+                                <div class="row">
+                                    <div class="mb-3 col-md-6">
+                                        <label for="scheduledDate" class="form-label">Conference Date:</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fa-solid fa-calendar-days"></i></span>
+                                            <input type="date" class="form-control" id="scheduledDate"
+                                                    th:field="*{scheduledDate}">
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 col-md-6">
+                                        <label for="scheduledTime" class="form-label">Conference time:</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fa-solid fa-clock"></i></span>
+                                            <input type="time" class="form-control" id="scheduledTime"
+                                                    th:field="*{scheduledTime}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="mb-3 col-md-6" id="conferenceType">
+                                        <label for="conferenceRecurring" class="form-label">Is recurring:</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-repeat"></i></span>
+                                            <select class="form-select" id="conferenceRecurring" th:field="*{isRecurring}" onchange="toggleRecurrenceFields()">
+                                                <option value="" disabled selected>Select</option>
+                                                <option th:value="false" >No</option>
+                                                <option th:value="true">Yes</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 col-md-6" id="recurrenceFields">
+                                        <label for="recurrence" class="form-label">Recurrence pattern:</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-repeat"></i></span>
+                                            <select class="form-select" id="recurrence" th:field="*{recurrence}">
+                                                <option value="" selected>Select pattern</option>
+                                                <option value="DAILY">Daily</option>
+                                                <option value="WEEKLY">Weekly</option>
+                                                <option value="MONTHLY">Monthly</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <button type="submit" class="btn btn-primary w-100">Create Chat</button>
                         </form>
                     </div>
@@ -66,27 +120,35 @@
             const chatType = document.getElementById('chatType').value;
             const singleUserSection = document.getElementById('singleUserSelection');
             const multiUserSection = document.getElementById('multiUserSelection');
-            const singleUserSelect = document.getElementById('singleUser');
-            const multiUserSelect = document.getElementById('multiUserSelect');
+            const conferenceSection = document.getElementById('conferenceSelection');
+            const recurrenceSection = document.getElementById('recurrenceFields');
 
             singleUserSection.style.display = 'none';
             multiUserSection.style.display = 'none';
-            singleUserSelect.required = false;
-            multiUserSelect.required = false;
+            conferenceSection.style.display = 'none';
 
             if (chatType === 'single') {
                 singleUserSection.style.display = 'block';
-                singleUserSelect.required = true;
-                multiUserSelect.required = false;
             } else if (chatType === 'group' || chatType === 'conference') {
                 multiUserSection.style.display = 'block';
-                multiUserSelect.required = true;
-                singleUserSelect.required = false;
-            } else {
-                singleUserSelect.required = false;
-                multiUserSelect.required = false;
+            }
+
+            if (chatType === 'conference') {
+                conferenceSection.style.display = 'block';
+                recurrenceSection.style.display = 'none';
             }
         }
+
+        function toggleRecurrenceFields() {
+            let isRecurring = document.getElementById('conferenceRecurring').value;
+
+            if(isRecurring === 'true') {
+                document.getElementById('recurrenceFields').style.display = 'block';
+            } else  {
+                document.getElementById('recurrenceFields').style.display = 'none';
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             toggleUserSelection();
         });

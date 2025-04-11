@@ -30,13 +30,18 @@ public class MessageController {
 
     @MessageMapping("/chat/sendMessage/{id}")
     @SendTo("/topic/messages")
-    public Messages sendMessage(@Payload Messages messages, @DestinationVariable("id") Long id, Principal principal) {
+    public Messages sendMessage(@Payload Messages message, @DestinationVariable("id") Long id, Principal principal) {
 
         Chats chat = chatService.getById(id);
         Users user = userService.getUserByUsername(principal.getName());
 
-        messages.setSender(user);
-        messages.setChat(chat);
-        return messageService.saveMessage(messages);
+        return messageService.saveMessage(user, chat, message);
     }
+
+    @MessageMapping("/chat/markRead/{id}")
+    public void markMessagesAsRead(@DestinationVariable("id") Long chatId, Principal principal) {
+        Users user = userService.getUserByUsername(principal.getName());
+        messageService.markAsRead(chatId, user);
+    }
+
 }
