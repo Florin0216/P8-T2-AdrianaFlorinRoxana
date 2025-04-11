@@ -116,7 +116,7 @@ public class ResourceController {
         List<Agents> availableAgents = agentService.getAllAgents();
         model.addAttribute("resource", resource);
         model.addAttribute("agents", availableAgents);
-        return "resource/AssignAgent";
+        return "Resource/AssignAgent";
     }
 
     @PostMapping("/{id}/assignAgent")
@@ -141,7 +141,7 @@ public class ResourceController {
         List<Stations> stations = stationService.getAllStations();
         model.addAttribute("resource", resource);
         model.addAttribute("stations", stations);
-        return "resource/AssignStation";
+        return "Resource/AssignStation";
     }
 
     @PostMapping("/{id}/assignStation")
@@ -174,7 +174,7 @@ public class ResourceController {
             return "redirect:/resource/view";
         }
         model.addAttribute("resource", resource);
-        return "resource/ScheduleMaintenance";
+        return "Resource/ScheduleMaintenance";
     }
 
     @PostMapping("/{id}/scheduleMaintenance")

@@ -5,7 +5,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 @Entity
-@Table(name = "CaseEvidences")
+@Table(name = "case_evidences")
 public class CaseEvidences {
 
     @Id
