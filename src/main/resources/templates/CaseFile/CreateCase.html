@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{Shared/_Layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Case File</title>
+</head>
+<body>
+<main layout:fragment="body">
+    <div class="container pt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-10 col-lg-8">
+                <div class="card">
+                    <div class="card-body p-4">
+                        <h2 class="text-center mb-4 h4">Create New Case File</h2>
+                        <form th:object="${case}" th:action="@{/case/create}" method="post">
+                            <div class="row">
+                                <div class="mb-3 col-md-6">
+                                    <label for="caseName" class="form-label">Case Name:</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fa-solid fa-file-invoice"></i></span>
+                                        <input type="text" class="form-control" id="caseName"
+                                               placeholder="Enter case name" th:field="*{caseName}" required>
+                                    </div>
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                    <label for="caseCategory" class="form-label">Case Category:</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fa-solid fa-tags"></i></span>
+                                        <select class="form-select" id="caseCategory" th:field="*{caseCategory}" required>
+                                            <option value="" selected disabled>Select category</option>
+                                            <option value="Homicide">Homicide</option>
+                                            <option value="Robbery">Robbery</option>
+                                            <option value="Fraud">Fraud</option>
+                                            <option value="Cybercrime">Cybercrime</option>
+                                            <option value="Narcotics">Narcotics</option>
+                                            <option value="Missing Person">Missing Person</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="caseDescription" class="form-label">Case Description:</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa-solid fa-file-lines"></i></span>
+                                    <textarea class="form-control" id="caseDescription"
+                                              placeholder="Enter detailed case description"
+                                              th:field="*{caseDescription}" rows="4" required></textarea>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="mb-3 col-md-6">
+                                    <label for="station" class="form-label">Assigned Station:</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fa-solid fa-building"></i></span>
+                                        <select class="form-select" id="station" th:field="*{station}" required>
+                                            <option value="" selected disabled>Select station</option>
+                                            <option th:each="station : ${stations}"
+                                                    th:value="${station.id}"
+                                                    th:text="${station.stationName}"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                    <label for="agent" class="form-label">Assigned Agent:</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fa-solid fa-user-shield"></i></span>
+                                        <select class="form-select" id="agent" th:field="*{agents}">
+                                            <option value="" selected disabled>Select agent (optional)</option>
+                                            <option th:each="agent : ${agents}"
+                                                    th:value="${agent.id}"
+                                                    th:text="${agent.firstName + ' ' + agent.lastName}"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-between mt-4">
+                                <button type="reset" class="btn btn-outline-secondary">Reset</button>
+                                <button type="submit" class="btn btn-primary">Create Case File</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

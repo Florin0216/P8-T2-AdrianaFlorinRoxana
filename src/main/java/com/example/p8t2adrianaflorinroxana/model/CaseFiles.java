@@ -20,16 +20,16 @@ public class CaseFiles {
     @Column(name = "case_category", nullable = false, length = 20)
     private String caseCategory;
 
-    @Column(name = "case_description", nullable = false, length = 150)
+    @Column(name = "case_description", nullable = false)
     private String caseDescription;
 
-    @Column(name = "status", nullable = false, length = 10)
+    @Column(name = "status", nullable = false, length = 20)
     private String status;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "updated_at", nullable = false)
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     @ManyToOne
@@ -42,6 +42,14 @@ public class CaseFiles {
 
     @OneToMany(mappedBy = "caseFile", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CaseEvidences> caseEvidences;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "cases_agents",
+            joinColumns = @JoinColumn(name = "case_id"),
+            inverseJoinColumns = @JoinColumn(name = "agent_id")
+    )
+    private List<Agents> agents;
 
     public Long getId() {
         return id;
@@ -107,11 +115,19 @@ public class CaseFiles {
         this.station = station;
     }
 
-    public Agents getAgent() {
+    public Agents getLastAgentAccess() {
         return lastAgentAccess;
     }
 
-    public void setAgent(Agents agent) {
-        this.lastAgentAccess = agent;
+    public void setLastAgentAccess(Agents lastAgentAccess) {
+        this.lastAgentAccess = lastAgentAccess;
+    }
+
+    public List<Agents> getAgents() {
+        return agents;
+    }
+
+    public void setAgents(List<Agents> agents) {
+        this.agents = agents;
     }
 }

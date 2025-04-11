@@ -57,6 +57,9 @@ public class Agents {
     @OneToMany(mappedBy = "agent", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Resources> resources;
 
+    @ManyToMany(mappedBy = "agents", fetch = FetchType.LAZY)
+    private List<CaseFiles> caseFiles;
+
     public long getId() {
         return id;
     }
