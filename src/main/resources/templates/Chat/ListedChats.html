@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{Shared/_Layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Listed chats</title>
+</head>
+<body>
+<main layout:fragment="body">
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center">
+            <h2 class="mb-4">Your Chats</h2>
+            <a th:href="@{/chat/create}" class="btn btn-primary">Start New Chat</a>
+        </div>
+
+        <div th:if="${userChats == null}" class="alert alert-info">
+            You don't have any chats yet. Start a new conversation!
+        </div>
+
+        <div class="mb-3 d-flex gap-2">
+            <a class="btn btn-outline-primary" th:href="@{/chat/show(type='single')}">1-on-1 Chats</a>
+            <a class="btn btn-outline-secondary" th:href="@{/chat/show(type='group')}" >Group Chats</a>
+        </div>
+
+        <div class="list-group">
+            <a th:each="chat : ${userChats}"
+               th:href="@{/chat/{id}(id=${chat.id})}"
+               th:if="${chat.type == status}"
+               class="list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1" th:text="${chat.id} ?: 'Unnamed Chat'">Chat Name</h5>
+                </div>
+                <p class="mb-1" th:text="${chat.type == 'single' ? 'Private chat' : 'Group chat'}">
+                    Chat type
+                </p>
+                <small th:text="${'Participants: ' + chat.users.size()}">Participants count</small>
+            </a>
+        </div>
+    </div>
+</main>
+</body>
+</html>

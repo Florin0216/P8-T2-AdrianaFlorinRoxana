@@ -30,6 +30,12 @@ public class Users implements UserDetails {
     )
     private Collection<Roles> roles;
 
+    @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
+    private List<Chats> chats;
+
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Messages> messages;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of();

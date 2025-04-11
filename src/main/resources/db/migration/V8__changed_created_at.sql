@@ -1,0 +1,5 @@
+ALTER TABLE chats
+    DROP COLUMN created_at;
+
+ALTER TABLE chats
+    ADD created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL;

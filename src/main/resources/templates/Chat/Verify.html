@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{Shared/_Layout.html}">
+<head>
+  <meta charset="UTF-8">
+  <title>Verify Conference</title>
+</head>
+<body>
+<main layout:fragment="body">
+  <div class="container pt-4">
+    <div class="row justify-content-center">
+      <div class="col-md-6 col-lg-5">
+        <div class="card">
+          <div class="card-body p-4">
+            <h2 class="text-center mb-3 h4">Join a Conference</h2>
+            <p class="text-center text-muted mb-4">You are about to enter a conference. Please enter the conference code below to continue.</p>
+            <form th:action="@{/chat/{id}/verify(id=${chatId})}" method="post">
+              <div class="mb-3">
+                <label for="conferenceCode" class="form-label">Conference Code:</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fa-solid fa-hashtag"></i></span>
+                  <input type="text" class="form-control" id="conferenceCode" name="code" placeholder="Enter code" required>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary w-100">Join Conference</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+</body>
+</html>

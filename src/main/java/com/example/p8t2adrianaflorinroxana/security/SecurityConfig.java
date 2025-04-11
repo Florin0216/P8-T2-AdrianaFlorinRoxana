@@ -57,6 +57,9 @@ public class SecurityConfig {
                                 "/resource/**",
                                 "/agent/**"
                         ).permitAll()
+                        .requestMatchers("/", "/login", "/css/**", "/images/**", "/agent/{stationId}/create", "/station/view","/station/add"
+                        ,"/station/{id}/edit", "/station/{id}/delete","/station/{id}/hierarchy","/agent/{id}/delete" , "/js/**").permitAll()
+                        .requestMatchers("/chat/**","/topic/**","/ws/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
