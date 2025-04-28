@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{Shared/_Layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>My Reported Cases</title>
+</head>
+<body>
+<main layout:fragment="body">
+    <div class="container py-4">
+        <h1 class="display-5 fw-bold text-center">My Reported Cases</h1>
+        <p class="text-muted text-center">View and track all cases you've reported to authorities</p>
+        <div class="row row-cols-1 g-4" th:if="${interactions != null and !#lists.isEmpty(interactions)}">
+            <div class="col" th:each="interaction : ${interactions}">
+                <div class="card border-0 shadow-sm mb-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <span class="fw-semibold text-secondary">Category:</span>
+                                    <span class="ms-2" th:text="${interaction.caseFile.caseCategory}"></span>
+                                </div>
+                                <div class="mb-3">
+                                    <span class="fw-semibold text-secondary">Reported on:</span>
+                                    <span class="ms-2"
+                                          th:text="${#temporals.format(interaction.caseFile.createdAt, 'MMMM dd, yyyy')}"></span>
+                                </div>
+                                <div class="mb-3">
+                                    <span class="fw-semibold text-secondary">Location:</span>
+                                    <span class="ms-2" th:text="${interaction.caseFile.caseLocation}"></span>
+                                </div>
+                                <div class="mb-3">
+                                    <span class="fw-semibold text-secondary">Status:</span>
+                                    <span class="ms-2">
+                                        <span th:if="${interaction.caseFile.status == 'SOLVED'}"
+                                              class="badge bg-success">SOLVED</span>
+                                        <span th:if="${interaction.caseFile.status == 'ACTIVE'}"
+                                              class="badge bg-primary">ACTIVE</span>
+                                        <span th:unless="${interaction.caseFile.status == 'SOLVED' or
+                                                         interaction.caseFile.status == 'ACTIVE'}"
+                                              class="badge bg-warning"
+                                              th:text="${interaction.caseFile.status}"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <span class="fw-semibold text-secondary">Description:</span>
+                                    <p class="mt-1 mb-0" th:text="${interaction.caseFile.caseDescription}"></p>
+                                </div>
+                                <div class="mb-3"
+                                     th:if="${interaction.caseFile.caseEvidences != null and !interaction.caseFile.caseEvidences.isEmpty()}">
+                                    <span class="fw-semibold text-secondary">Evidence:</span>
+                                    <div class="mt-1">
+                                        <span th:each="evidence : ${interaction.caseFile.caseEvidences}"
+                                              class="badge bg-secondary me-1 mb-1">
+                                            <i class="fas fa-file me-1"></i>
+                                            <span th:text="${evidence.evidenceName}"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-light">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">
+                                Last updated: <span
+                                    th:text="${#temporals.format(interaction.caseFile.updatedAt, 'MMMM dd, yyyy')}"></span>
+                            </small>
+                            <small class="text-muted">
+                                Assigned to: <span
+                                    th:text="${interaction.caseFile.station != null ? interaction.caseFile.station.stationName : 'Not assigned'}"></span>
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col">
+                <div class="alert alert-light border">
+                    <small>
+                        <i class="fas fa-info-circle me-2"></i>
+                        This page is only accessible through your secure link. Do not share this link with others.
+                    </small>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</main>
+</body>
+</html>

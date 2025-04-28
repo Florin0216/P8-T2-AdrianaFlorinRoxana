@@ -25,12 +25,23 @@
 
                         <div class="mb-4">
                             <h5>Assigned Station & Agents</h5>
-                            <p><strong>Station:</strong> <span th:text="${case.station.stationName}">Station Name</span></p>
+
+                            <p><strong>Station:</strong>
+                                <span th:if="${case.station != null}" th:text="${case.station.stationName}">Station Name</span>
+                                <span th:if="${case.station == null}" class="text-muted">No station assigned</span>
+                            </p>
+
                             <p><strong>Agents:</strong></p>
-                            <ul>
-                                <li th:each="agent : ${case.agents}" th:text="${agent.firstName + ' ' + agent.lastName}">Agent Name</li>
-                            </ul>
+                            <div th:if="${case.agents != null and !#lists.isEmpty(case.agents)}">
+                                <ul>
+                                    <li th:each="agent : ${case.agents}" th:text="${agent.firstName + ' ' + agent.lastName}">Agent Name</li>
+                                </ul>
+                            </div>
+                            <div th:if="${case.agents == null or #lists.isEmpty(case.agents)}">
+                                <p class="text-muted">No agents assigned</p>
+                            </div>
                         </div>
+
 
                         <div class="mb-4">
                             <h5>Attached Evidences</h5>
