@@ -37,8 +37,8 @@ public class CaseFiles {
     private Stations station;
 
     @ManyToOne
-    @JoinColumn(name = "agent_id")
-    private Agents lastAgentAccess;
+    @JoinColumn(name = "user_id")
+    private Users lastUserAccess;
 
     @OneToMany(mappedBy = "caseFile", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CaseEvidences> caseEvidences;
@@ -115,19 +115,27 @@ public class CaseFiles {
         this.station = station;
     }
 
-    public Agents getLastAgentAccess() {
-        return lastAgentAccess;
-    }
-
-    public void setLastAgentAccess(Agents lastAgentAccess) {
-        this.lastAgentAccess = lastAgentAccess;
-    }
-
     public List<Agents> getAgents() {
         return agents;
     }
 
     public void setAgents(List<Agents> agents) {
         this.agents = agents;
+    }
+
+    public Users getLastUserAccess() {
+        return lastUserAccess;
+    }
+
+    public void setLastUserAccess(Users lastUserAccess) {
+        this.lastUserAccess = lastUserAccess;
+    }
+
+    public List<CaseEvidences> getCaseEvidences() {
+        return caseEvidences;
+    }
+
+    public void setCaseEvidences(List<CaseEvidences> caseEvidences) {
+        this.caseEvidences = caseEvidences;
     }
 }

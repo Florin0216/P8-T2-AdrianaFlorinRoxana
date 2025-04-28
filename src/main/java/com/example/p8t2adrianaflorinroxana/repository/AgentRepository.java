@@ -11,5 +11,6 @@ public interface AgentRepository extends JpaRepository<Agents, Integer> {
 
     void deleteById(long id);
 
-    Agents findByUser(Users user);
+    List<Agents> findAllByFirstNameOrLastName(String firstName, String lastName);
+
 }

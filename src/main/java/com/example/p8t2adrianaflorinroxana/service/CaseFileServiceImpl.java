@@ -1,24 +1,88 @@
 package com.example.p8t2adrianaflorinroxana.service;
 
+import com.example.p8t2adrianaflorinroxana.model.Agents;
+import com.example.p8t2adrianaflorinroxana.model.CaseEvidences;
 import com.example.p8t2adrianaflorinroxana.model.CaseFiles;
+import com.example.p8t2adrianaflorinroxana.model.Users;
 import com.example.p8t2adrianaflorinroxana.repository.CaseFileRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class CaseFileServiceImpl {
 
     private final CaseFileRepository caseFileRepository;
+    private final FileStorageServiceImpl fileStorageService;
 
-    public CaseFileServiceImpl(CaseFileRepository caseFileRepository) {
+    public CaseFileServiceImpl(CaseFileRepository caseFileRepository, FileStorageServiceImpl fileStorageService) {
         this.caseFileRepository = caseFileRepository;
+        this.fileStorageService = fileStorageService;
     }
 
-    public void createCaseFile(CaseFiles caseFiles) {
+    public void createCaseFile(CaseFiles caseFile, MultipartFile file, String evidenceName) throws IOException {
+        caseFile.setCreatedAt(LocalDateTime.now());
+        caseFile.setStatus("ACTIVE");
 
-        caseFiles.setCreatedAt(LocalDateTime.now());
-        caseFiles.setStatus("ACTIVE");
-        caseFileRepository.save(caseFiles);
+        if (file != null) {
+            fileStorageService.saveFile(file);
+
+            CaseEvidences evidence = new CaseEvidences();
+            evidence.setEvidenceName(evidenceName != null ? evidenceName : file.getOriginalFilename());
+            evidence.setEvidencePath(file.getOriginalFilename());
+            evidence.setCaseFile(caseFile);
+
+            List<CaseEvidences> evidences = new ArrayList<>();
+            evidences.add(evidence);
+            caseFile.setCaseEvidences(evidences);
+        }
+
+        caseFileRepository.save(caseFile);
+    }
+
+
+    public List<CaseFiles> getAllCaseFiles() {
+         return caseFileRepository.findAll();
+    }
+
+    public List<CaseFiles> getCaseFilesByCategory(String category) {
+        return caseFileRepository.findAllByCaseCategory(category);
+    }
+
+    public List<CaseFiles> getCaseFilesByNameOrAgentName(String fileName, List<Agents> agent) {
+
+        return caseFileRepository.findAllByCaseNameOrAgents(fileName, agent);
+    }
+
+    public List<CaseFiles> getCaseFilesByStatus(String status) {
+
+        return caseFileRepository.findAllByStatus(status);
+    }
+
+    public CaseFiles getCaseFileById(Long id) {
+
+        return caseFileRepository.findById(id).orElse(null);
+    }
+
+    public void updateCaseFile(CaseFiles caseFiles, Users user) {
+        CaseFiles oldCaseFile = getCaseFileById(caseFiles.getId());
+
+        oldCaseFile.setCaseName(caseFiles.getCaseName());
+        oldCaseFile.setAgents(caseFiles.getAgents());
+        oldCaseFile.setUpdatedAt(LocalDateTime.now());
+        oldCaseFile.setStation(caseFiles.getStation());
+        oldCaseFile.setCaseCategory(caseFiles.getCaseCategory());
+        oldCaseFile.setCaseDescription(caseFiles.getCaseDescription());
+        oldCaseFile.setLastUserAccess(user);
+        caseFileRepository.save(oldCaseFile);
+
+    }
+
+    public CaseFiles findCaseFileById(Long id) {
+        return caseFileRepository.findById(id).orElse(null);
     }
 }

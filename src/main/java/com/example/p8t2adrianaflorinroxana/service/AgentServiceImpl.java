@@ -1,6 +1,7 @@
 package com.example.p8t2adrianaflorinroxana.service;
 
 import com.example.p8t2adrianaflorinroxana.model.Agents;
+import com.example.p8t2adrianaflorinroxana.model.Users;
 import com.example.p8t2adrianaflorinroxana.repository.AgentRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -36,4 +37,10 @@ public class AgentServiceImpl {
     public List<Agents> getAllAgents() {
         return agentRepository.findAll();
     }
+
+    public List<Agents> getAgentByName(String firstName,String lastName) {
+
+        return agentRepository.findAllByFirstNameOrLastName(firstName,lastName);
+    }
+
 }

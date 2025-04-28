@@ -26,4 +26,43 @@ public class CaseEvidences {
     @JoinColumn(name = "case_id")
     private CaseFiles caseFile;
 
+    public String getEvidenceName() {
+        return evidenceName;
+    }
+
+    public void setEvidenceName(String evidenceName) {
+        this.evidenceName = evidenceName;
+    }
+
+    public String getEvidencePath() {
+        return evidencePath;
+    }
+
+    public void setEvidencePath(String evidencePath) {
+        this.evidencePath = evidencePath;
+    }
+
+    public LocalTime getUploadedAt() {
+        return uploadedAt;
+    }
+
+    public void setUploadedAt(LocalTime uploadedAt) {
+        this.uploadedAt = uploadedAt;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public CaseFiles getCaseFile() {
+        return caseFile;
+    }
+
+    public void setCaseFile(CaseFiles caseFile) {
+        this.caseFile = caseFile;
+    }
 }

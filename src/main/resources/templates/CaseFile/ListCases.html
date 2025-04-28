@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{Shared/_Layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Case listing</title>
+</head>
+<body>
+<main layout:fragment="body">
+    <div class="container mt-3">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold text-dark">Case Files</h2>
+            <a th:href="@{/case/create}" class="btn btn-primary"><i class="fa-solid fa-plus"></i> New Case</a>
+        </div>
+        <div class="container">
+            <div class="container box-shadow p-3">
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <form method="get" th:action="@{/case/listing}" class="search-container">
+                            <div class="input-group input-group-lg">
+                                <input type="text" class="form-control rounded-start-pill p-3" placeholder="Search..."
+                                       name="searchTerm" th:value="${param.searchTerm}">
+                                <button type="submit" class="btn btn-outline-secondary">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                                <a th:href="@{/case/listing}"
+                                   class="btn btn-outline-secondary justify-content-center align-self-center p-3"
+                                   th:if="${param.searchTerm != null}">
+                                    <i class="fas fa-times"></i>
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <form method="get" th:action="@{/case/listing}">
+            <div class="row mb-4">
+                <div class="col-md-8 mx-auto">
+                    <div class="d-flex gap-3">
+                        <select class="form-select" name="category">
+                            <option value="all">All Categories</option>
+                            <option value="Homicide">Homicide</option>
+                        </select>
+                        <select class="form-select" name="status">
+                            <option value="all">All Statuses</option>
+                            <option value="ACTIVE">Active</option>
+                        </select>
+                        <button type="submit" class="btn btn-primary">Filter</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div>
+            <div class="d-flex justify-content-between align-content-center border rounded p-1 mb-2 bg-light"
+                 th:each="caseFile : ${cases}">
+                <div class="d-flex col-md-8">
+                    <img src="https://img.icons8.com/color/100/000000/folder-invoices.png" alt="case-file-image"
+                         width="70" height="70" class="align-self-center"/>
+                    <div class="ms-3">
+                        <div class="d-flex flex-wrap justify-content-between align-items-start border-bottom pb-2">
+                            <h5 class="mb-0 fw-bold flex-grow-1 me-3 text-break" style="min-width: 200px;"
+                                th:text="${caseFile.caseName}"></h5>
+                            <div class="about d-flex flex-wrap gap-1">
+                                <div th:class="'badge ' + (${caseFile.status == 'Open'} ? 'bg-success' : (${caseFile.status == 'Closed'} ? 'bg-danger' : 'bg-warning'))"
+                                     th:text="${caseFile.status}"></div>
+                                <div class="badge bg-dark-subtle" th:text="${caseFile.caseCategory}"></div>
+                            </div>
+                        </div>
+                        <div class="about">
+                            <div>Station assigned: <span
+                                    th:text="${caseFile.station != null ? caseFile.station.stationName : 'N/A'}"></span>
+                            </div>
+                            <div>Last modification made by: <span
+                                    th:text="${caseFile.lastUserAccess != null ? caseFile.lastUserAccess.username : 'N/A'}"></span>
+                            </div>
+                        </div>
+                        <div>
+                            Created:
+                            <span th:text="${caseFile.createdAt.toLocalDate()}"></span>
+                            at
+                            <span th:text="${#temporals.format(caseFile.createdAt.toLocalTime(), 'HH:mm')}"></span>
+                        </div>
+
+                        <div>
+                            Updated:
+                            <span th:if="${caseFile.updatedAt != null}">
+        <span th:text="${caseFile.updatedAt.toLocalDate()}"></span>
+        at
+        <span th:text="${#temporals.format(caseFile.updatedAt.toLocalTime(), 'HH:mm')}"></span>
+    </span>
+                            <span th:if="${caseFile.updatedAt == null}">N/A</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center justify-content-between">
+                    <a th:href="@{/case/{id}/view(id=${caseFile.id})}" class="btn btn-outline-primary">View</a>
+                    <a th:href="@{/case/{id}/update(id=${caseFile.id})}" class="btn btn-outline-primary">Edit</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

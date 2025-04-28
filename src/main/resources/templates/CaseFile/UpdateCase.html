@@ -2,7 +2,7 @@
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{Shared/_Layout.html}">
 <head>
     <meta charset="UTF-8">
-    <title>Create Case File</title>
+    <title>Edit</title>
 </head>
 <body>
 <main layout:fragment="body">
@@ -11,8 +11,8 @@
             <div class="col-md-10 col-lg-8">
                 <div class="card">
                     <div class="card-body p-4">
-                        <h2 class="text-center mb-4 h4">Create New Case File</h2>
-                        <form th:object="${case}" th:action="@{/case/create}" method="post" enctype="multipart/form-data">
+                        <h2 class="text-center mb-4 h4">Edit Case File</h2>
+                        <form th:object="${case}" th:action="@{/case/{id}/update(id=${case.id})}" method="post">
                             <div class="row">
                                 <div class="mb-3 col-md-6">
                                     <label for="caseName" class="form-label">Case Name:</label>
@@ -56,10 +56,11 @@
                                     <div class="input-group">
                                         <span class="input-group-text"><i class="fa-solid fa-building"></i></span>
                                         <select class="form-select" id="station" th:field="*{station}" required>
-                                            <option value="" selected disabled>Select station</option>
+                                            <option value="" disabled>Select station</option>
                                             <option th:each="station : ${stations}"
                                                     th:value="${station.id}"
-                                                    th:text="${station.stationName}"></option>
+                                                    th:text="${station.stationName}"
+                                                    th:selected="${station.id == case.station.id}"></option>
                                         </select>
                                     </div>
                                 </div>
@@ -68,34 +69,18 @@
                                     <div class="input-group">
                                         <span class="input-group-text"><i class="fa-solid fa-user-shield"></i></span>
                                         <select class="form-select" id="agent" th:field="*{agents}" multiple>
-                                            <option value="" selected disabled>Select agent (optional)</option>
+                                            <option value="" disabled>Select agent (optional)</option>
                                             <option th:each="agent : ${agents}"
                                                     th:value="${agent.id}"
-                                                    th:text="${agent.firstName + ' ' + agent.lastName}"></option>
+                                                    th:text="${agent.firstName + ' ' + agent.lastName}"
+                                                    th:selected="${case.agents == agent}"></option>
                                         </select>
                                     </div>
                                 </div>
                             </div>
-                            <div class="card mb-3">
-                                <div class="card-header bg-light">
-                                    <h5 class="mb-0 h6">Initial Evidence Upload (Optional)</h5>
-                                </div>
-                                <div class="card-body">
-                                    <div class="mb-3">
-                                        <label for="evidenceName" class="form-label">Evidence Name:</label>
-                                        <input type="text" class="form-control" id="evidenceName"
-                                               name="evidenceName" placeholder="Enter evidence name">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="evidenceFile" class="form-label">Evidence File:</label>
-                                        <input type="file" class="form-control" id="evidenceFile" name="file">
-                                        <div class="form-text">Supports documents (PDF, DOC), images (JPG, PNG), and videos (MP4).</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="d-flex justify-content-between mt-4">
-                                <button type="reset" class="btn btn-outline-secondary">Reset</button>
-                                <button type="submit" class="btn btn-primary">Create Case File</button>
+
+                            <div class="d-flex justify-content-center mt-4">
+                                <button type="submit" class="btn btn-primary">Update</button>
                             </div>
                         </form>
                     </div>

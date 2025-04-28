@@ -44,4 +44,7 @@ body{
     height: 400px;
 }
 
+.search-container {
+    position: relative;
+}
 
