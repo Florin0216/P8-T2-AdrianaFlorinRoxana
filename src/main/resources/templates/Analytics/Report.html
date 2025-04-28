@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{Shared/_Layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Report</title>
+</head>
+<body>
+<main layout:fragment="body" class="container py-4">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h1 class="m-0 font-weight-bold text-primary">Crime Trends Report</h1>
+            <form th:action="@{/analytics/report}" method="get" class="form-inline">
+                <div class="input-group">
+                    <select name="year" class="form-control">
+                        <option value="" th:selected="${selectedYear == null}">All Years</option>
+                        <option th:each="yearOption : ${years}"
+                                th:value="${yearOption}"
+                                th:text="${yearOption}"
+                                th:selected="${yearOption == selectedYear}">
+                        </option>
+                    </select>
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-primary">Generate</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="card-body">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="alert alert-primary">
+                        <h4 class="alert-heading">Report Summary</h4>
+                        <p th:if="${selectedYear != null}">
+                            This report analyzes crime trends for <span class="font-weight-bold" th:text="${selectedYear}"></span>.
+                            <span th:if="${trendsData.yearlyComparison != null}">
+                                Compared to <span th:text="${selectedYear - 1}"></span>, there was a
+                                <span th:if="${trendsData.yearlyComparison?.changePercentFormatted != null and trendsData.yearlyComparison.changePercentFormatted != 'N/A (no previous year data)'}"
+                                      th:class="${trendsData.yearlyComparison.currentYear > trendsData.yearlyComparison.previousYear ? 'trend-indicator trend-up' : (trendsData.yearlyComparison.currentYear < trendsData.yearlyComparison.previousYear ? 'trend-indicator trend-down' : '')}">
+                                    <span th:text="${trendsData.yearlyComparison.changePercentFormatted}"></span>
+                                </span>
+                                <span th:if="${trendsData.yearlyComparison?.changePercentFormatted == null or trendsData.yearlyComparison.changePercentFormatted == 'N/A (no previous year data)'}" class="na-value">
+                                    comparison data not available
+                                </span>
+                                in reported crimes.
+                            </span>
+                            <span th:if="${trendsData.yearlyComparison == null and selectedYear != null}" class="na-value">
+                                (Yearly comparison data not available for <span th:text="${selectedYear - 1}"></span>)
+                            </span>
+                        </p>
+                        <p th:if="${selectedYear == null}">
+                            This report shows comprehensive crime trends across all available historical data.
+                        </p>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p class="mb-1"><strong>Total Cases Analyzed:</strong>
+                                    <span th:text="${trendsData.totalCases ?: 0}">0</span>
+                                </p>
+                                <p class="mb-1">
+                                    <strong>Peak Month:</strong>
+                                    <span th:if="${trendsData.containsKey('peakMonthName')}"
+                                          th:text="${trendsData.peakMonthName} + ' (' +
+                                                    ${trendsData.peakMonthCount} + ' cases, ' +
+                                                    ${trendsData.peakMonthPercentage} + ')'">
+                                    </span>
+                                    <span th:if="${!trendsData.containsKey('peakMonthName')}" class="na-value">
+                                        Not available
+                                    </span>
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <p class="mb-1">
+                                    <strong>Most Common Crime:</strong>
+                                    <span th:if="${trendsData.containsKey('commonCrimeName')}"
+                                          th:text="${trendsData.commonCrimeName} + ' (' +
+                                                    ${trendsData.commonCrimeCount} + ' cases, ' +
+                                                    ${trendsData.commonCrimePercentage} + ')'">
+                                    </span>
+                                    <span th:if="${!trendsData.containsKey('commonCrimeName')}" class="na-value">
+                                        Not available
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Monthly Crime Distribution</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered data-table">
+                                    <thead>
+                                    <tr>
+                                        <th>Month</th>
+                                        <th>Cases</th>
+                                        <th>Percentage</th>
+                                        <th>Distribution</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:if="${trendsData.monthlyTrends == null or trendsData.monthlyTrends.isEmpty()}">
+                                        <td colspan="4" class="text-center na-value">No monthly data available</td>
+                                    </tr>
+                                    <tr th:each="month : ${trendsData.monthlyTrends?.entrySet()}" class="month-row">
+                                        <td th:text="${month.key}">Month</td>
+                                        <td th:text="${month.value?.count ?: 0}">0</td>
+                                        <td th:text="${month.value?.percentageFormatted ?: '0.0%'}">0%</td>
+                                        <td>
+                                            <div class="progress">
+                                                <div class="progress-bar"
+                                                     th:style="'width: ' + (${month.value?.percentage} ?: 0) + '%'"
+                                                     th:text="${month.value?.percentageFormatted ?: '0.0%'}">
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Crime Type Distribution</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered data-table">
+                                    <thead>
+                                    <tr>
+                                        <th>Crime Type</th>
+                                        <th>Cases</th>
+                                        <th>Percentage</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:if="${trendsData.crimeTypeTrends == null or trendsData.crimeTypeTrends.isEmpty()}">
+                                        <td colspan="3" class="text-center na-value">No crime type data available</td>
+                                    </tr>
+                                    <tr th:each="crime : ${trendsData.crimeTypeTrends?.entrySet()}">
+                                        <td th:text="${crime.key}">Crime Type</td>
+                                        <td th:text="${crime.value?.count ?: 0}">0</td>
+                                        <td th:text="${crime.value?.percentageFormatted ?: '0.0%'}">0%</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6" th:if="${selectedYear != null}">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Yearly Comparison</h6>
+                        </div>
+                        <div class="card-body">
+                            <div th:if="${trendsData.yearlyComparison == null}" class="alert alert-warning na-value">
+                                Yearly comparison data is not available for <span th:text="${selectedYear - 1}"></span>.
+                            </div>
+                            <div th:if="${trendsData.yearlyComparison != null}" class="table-responsive">
+                                <table class="table table-bordered data-table">
+                                    <thead>
+                                    <tr>
+                                        <th>Year</th>
+                                        <th>Cases</th>
+                                        <th>Change</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td th:text="${selectedYear - 1}">Previous Year</td>
+                                        <td th:text="${trendsData.yearlyComparison?.previousYear ?: 'N/A'}">0</td>
+                                        <td>-</td>
+                                    </tr>
+                                    <tr>
+                                        <td th:text="${selectedYear}">Current Year</td>
+                                        <td th:text="${trendsData.yearlyComparison?.currentYear ?: 'N/A'}">0</td>
+                                        <td th:if="${trendsData.yearlyComparison?.changePercentFormatted != null and trendsData.yearlyComparison.changePercentFormatted != 'N/A (no previous year data)'}"
+                                            th:class="${trendsData.yearlyComparison.currentYear > trendsData.yearlyComparison.previousYear ? 'trend-indicator trend-up' : (trendsData.yearlyComparison.currentYear < trendsData.yearlyComparison.previousYear ? 'trend-indicator trend-down' : '')}"
+                                            th:text="${trendsData.yearlyComparison.changePercentFormatted}">
+                                        </td>
+                                        <td th:if="${trendsData.yearlyComparison?.changePercentFormatted == null or trendsData.yearlyComparison.changePercentFormatted == 'N/A (no previous year data)'}"
+                                            class="na-value">
+                                            N/A
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Key Insights</h6>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    <i class="fas fa-calendar-alt text-primary mr-2"></i>
+                                    <strong>Seasonal Pattern:</strong>
+                                    <span th:if="${trendsData.containsKey('peakMonthName')}">
+                                        Crime peaks in <span th:text="${trendsData.peakMonthName}"></span>
+                                        with <span th:text="${trendsData.peakMonthPercentage}"></span>
+                                        of all cases for the selected period.
+                                    </span>
+                                    <span th:if="${!trendsData.containsKey('peakMonthName')}" class="na-value">
+                                        No clear seasonal pattern identified.
+                                    </span>
+                                </li>
+                                <li class="list-group-item">
+                                    <i class="fas fa-balance-scale text-info mr-2"></i>
+                                    <strong>Crime Distribution:</strong>
+                                    <span th:if="${trendsData.containsKey('commonCrimeName')}">
+                                        <span th:text="${trendsData.commonCrimeName}"></span> accounts for
+                                        <span th:text="${trendsData.commonCrimePercentage}"></span>
+                                        of all reported crimes for the selected period.
+                                    </span>
+                                    <span th:if="${!trendsData.containsKey('commonCrimeName')}" class="na-value">
+                                        No crime distribution data available.
+                                    </span>
+                                </li>
+                                <li th:if="${selectedYear != null}" class="list-group-item">
+                                    <i class="fas fa-chart-line text-warning mr-2"></i>
+                                    <strong>Annual Trend:</strong>
+                                    <span th:if="${trendsData.yearlyComparison != null}">
+                                        <span th:if="${trendsData.yearlyComparison?.changePercentFormatted != null and trendsData.yearlyComparison.changePercentFormatted != 'N/A (no previous year data)'}"
+                                              th:class="${trendsData.yearlyComparison.currentYear > trendsData.yearlyComparison.previousYear ? 'trend-indicator trend-up' : (trendsData.yearlyComparison.currentYear < trendsData.yearlyComparison.previousYear ? 'trend-indicator trend-down' : '')}">
+                                            <span th:text="${trendsData.yearlyComparison.changePercentFormatted}"></span> compared to the previous year.
+                                        </span>
+                                        <span th:if="${trendsData.yearlyComparison?.changePercentFormatted == null or trendsData.yearlyComparison.changePercentFormatted == 'N/A (no previous year data)'}"
+                                              class="na-value">
+                                            No trend data available for comparison.
+                                        </span>
+                                    </span>
+                                    <span th:if="${trendsData.yearlyComparison == null}" class="na-value">
+                                        No comparison data available for <span th:text="${selectedYear - 1}"></span>.
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

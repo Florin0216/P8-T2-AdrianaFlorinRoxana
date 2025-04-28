@@ -23,6 +23,9 @@ public class CaseFiles {
     @Column(name = "case_description", nullable = false)
     private String caseDescription;
 
+    @Column(name = "case_location", length = 100)
+    private String caseLocation;
+
     @Column(name = "status", nullable = false, length = 20)
     private String status;
 
@@ -129,6 +132,14 @@ public class CaseFiles {
 
     public void setLastUserAccess(Users lastUserAccess) {
         this.lastUserAccess = lastUserAccess;
+    }
+
+    public String getCaseLocation() {
+        return caseLocation;
+    }
+
+    public void setCaseLocation(String caseLocation) {
+        this.caseLocation = caseLocation;
     }
 
     public List<CaseEvidences> getCaseEvidences() {
