@@ -6,6 +6,7 @@ import com.example.p8t2adrianaflorinroxana.model.Users;
 import com.example.p8t2adrianaflorinroxana.repository.MessageRepository;
 import com.example.p8t2adrianaflorinroxana.service.ChatServiceImpl;
 import com.example.p8t2adrianaflorinroxana.service.UserServiceImpl;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +29,7 @@ public class ChatController {
         this.messageRepository = messageRepository;
     }
 
+    @PreAuthorize("hasRole('AGENT')")
     @GetMapping("/create")
     public String createForm(Model model, Principal principal) {
 
@@ -39,6 +41,7 @@ public class ChatController {
         return "Chat/Create";
     }
 
+    @PreAuthorize("hasRole('AGENT')")
     @PostMapping("/create")
     public String create(@ModelAttribute Chats chat,
                          Principal principal,
@@ -76,6 +79,7 @@ public class ChatController {
         return "redirect:/chat/" + newChat.getId();
     }
 
+    @PreAuthorize("hasRole('AGENT')")
     @GetMapping("/{id}")
     public String showChat(@PathVariable long id, Model model, Principal principal) {
 
@@ -93,6 +97,7 @@ public class ChatController {
         return "Chat/View";
     }
 
+    @PreAuthorize("hasRole('AGENT')")
     @GetMapping("/show")
     public String showChats(Model model,
                             Principal principal,

@@ -27,7 +27,9 @@
                                     <div class="input-group">
                                         <span class="input-group-text"><i class="fas fa-lock"></i></span>
                                         <input type="password" class="form-control" id="password"
-                                               placeholder="Enter password" th:field="*{user.password}" required>
+                                               placeholder="Enter password" th:field="*{user.password}" required
+                                               pattern="(?=.*\d)(?=.*[\W_]).{8,}"
+                                               title="Password must be at least 8 characters long and include at least one digit and one special character.">
                                     </div>
                                 </div>
                             </div>
@@ -117,6 +119,17 @@
                                     <span class="input-group-text"><i class="fa-solid fa-location-dot"></i></span>
                                     <input type="text" class="form-control" id="address"
                                            placeholder="Enter address" th:field="*{address}" required>
+                                </div>
+                            </div>
+                            <div class="mb-3 ">
+                                <label for="role" class="form-label">Role:</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa-solid fa-user-shield"></i></span>
+                                    <select class="form-select" id="role" name="role" required>
+                                        <option value="" selected disabled>Select role</option>
+                                        <option value="ROLE_AGENT">Agent</option>
+                                        <option value="ROLE_HEAD" th:if="${#authorization.expression('hasRole(''ADMIN'')')}">Head</option>
+                                    </select>
                                 </div>
                             </div>
                             <button type="submit" class="btn btn-primary w-100">Register</button>

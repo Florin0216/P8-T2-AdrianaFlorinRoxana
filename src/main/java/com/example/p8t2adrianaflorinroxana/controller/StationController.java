@@ -5,6 +5,8 @@ import com.example.p8t2adrianaflorinroxana.model.Agents;
 import com.example.p8t2adrianaflorinroxana.model.Stations;
 import com.example.p8t2adrianaflorinroxana.service.AgentServiceImpl;
 import com.example.p8t2adrianaflorinroxana.service.StationServiceImpl;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -32,25 +34,30 @@ public class StationController {
         return "Station/StationView";
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/add")
     public String showAddStationForm(Model model) {
         model.addAttribute("station", new Stations());
         return "Station/AddStation";
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/add")
     public String addStation(@ModelAttribute("station") Stations station) {
         stationService.saveStation(station);
         return "redirect:/station/view";
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}/edit")
     public String showEditStationForm(@PathVariable long id, Model model) {
+
         Stations station = stationService.getStationById(id);
         model.addAttribute("station", station);
         return "Station/EditStation";
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/{id}/edit")
     public String editStation(@ModelAttribute("station") Stations station) {
 
@@ -58,6 +65,7 @@ public class StationController {
         return "redirect:/station/view";
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}/delete")
     public String deleteStation(@PathVariable long id) {
 

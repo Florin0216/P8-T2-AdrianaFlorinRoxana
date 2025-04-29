@@ -9,7 +9,7 @@
     <div class="container mt-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h1>Police Stations</h1>
-            <a th:href="@{/station/add}" class="btn btn-primary">
+            <a th:href="@{/station/add}" class="btn btn-primary" th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
                 <i class="bi bi-plus-circle"></i> Add New Station
             </a>
         </div>
@@ -23,7 +23,7 @@
                     <th>Phone Number</th>
                     <th>Latitude</th>
                     <th>Longitude</th>
-                    <th>Actions</th>
+                    <th th:if="${#authorization.expression('hasRole(''ADMIN'')')}">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -33,7 +33,7 @@
                     <td th:text="${station.stationPhone}"></td>
                     <td th:text="${station.latitude}"></td>
                     <td th:text="${station.longitude}"></td>
-                    <td>
+                    <td th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
                         <div class="btn-group" role="group">
                             <a th:href="@{/station/{id}/edit(id=${station.id})}" class="btn btn-sm btn-warning">
                                 <i class="bi bi-pencil"></i> Edit

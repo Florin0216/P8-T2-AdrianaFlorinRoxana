@@ -51,7 +51,7 @@
                               <th scope="col" >Phone</th>
                               <th scope="col" >Email</th>
                               <th scope="col" >Status</th>
-                              <th scope="col" class="text-end">Actions</th>
+                              <th scope="col" th:if="${#authorization.expression('hasRole(''HEAD'')')}">Actions</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -67,7 +67,7 @@
                                 <span th:switch="${agent.status}">
                                 </span>
                               </td>
-                              <td class="text-end">
+                              <td class="text-end" th:if="${#authorization.expression('hasRole(''HEAD'')')}">
                                 <div class="btn-group btn-group-sm" role="group">
                                   <a th:href="@{/agent/{id}/edit(id=${agent.id})}"
                                      class="btn btn-outline-primary"

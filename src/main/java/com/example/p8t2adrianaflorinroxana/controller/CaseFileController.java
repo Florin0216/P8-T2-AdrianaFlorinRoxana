@@ -2,6 +2,7 @@ package com.example.p8t2adrianaflorinroxana.controller;
 
 import com.example.p8t2adrianaflorinroxana.model.*;
 import com.example.p8t2adrianaflorinroxana.service.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +29,7 @@ public class CaseFileController {
         this.userService = userService;
     }
 
+    @PreAuthorize("hasRole('AGENT')")
     @GetMapping("/listing")
     public String viewCases(Model model,
                             @RequestParam(name = "category", defaultValue = "all") String category,
@@ -57,6 +59,7 @@ public class CaseFileController {
         return "CaseFile/ListCases";
     }
 
+    @PreAuthorize("hasRole('HEAD')")
     @GetMapping("/create")
     public String createCase(Model model) {
 
@@ -69,6 +72,7 @@ public class CaseFileController {
         return "CaseFile/CreateCase";
     }
 
+    @PreAuthorize("hasRole('HEAD')")
     @PostMapping("/create")
     public String createCase(@ModelAttribute("case") CaseFiles caseFiles,
                              @RequestParam(value = "evidenceName", required = false) String evidenceName,
@@ -79,6 +83,7 @@ public class CaseFileController {
         return "redirect:/case/listing";
     }
 
+    @PreAuthorize("hasRole('AGENT')")
     @GetMapping("/{id}/view")
     public String viewCase(@PathVariable Long id, Model model) {
 
@@ -87,7 +92,7 @@ public class CaseFileController {
         return "CaseFile/ViewCase";
     }
 
-
+    @PreAuthorize("hasRole('AGENT')")
     @GetMapping("/{id}/update")
     public String updateCase(@PathVariable long id, Model model) {
 
@@ -101,6 +106,7 @@ public class CaseFileController {
         return "CaseFile/UpdateCase";
     }
 
+    @PreAuthorize("hasRole('AGENT')")
     @PostMapping("/{id}/update")
     public String updateCase(@ModelAttribute("case") CaseFiles caseFiles, Principal principal) {
         Users loggedUser = userService.getUserByUsername(principal.getName());

@@ -11,6 +11,7 @@ import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserDetailsService {
+
     private final UserRepository userRepository;
 
     public UserServiceImpl(UserRepository userRepository) {
@@ -37,4 +38,5 @@ public class UserServiceImpl implements UserDetailsService {
     public Users getUserById(long id) {
         return userRepository.findById(id).orElse(null);
     }
+
 }

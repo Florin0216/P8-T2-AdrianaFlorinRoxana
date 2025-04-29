@@ -7,6 +7,7 @@ import com.example.p8t2adrianaflorinroxana.service.AgentServiceImpl;
 import com.example.p8t2adrianaflorinroxana.service.ResourceServiceImpl;
 import com.example.p8t2adrianaflorinroxana.service.StationServiceImpl;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +31,7 @@ public class ResourceController {
         this.stationService = stationService;
     }
 
+    @PreAuthorize("hasRole('AGENT')")
     @GetMapping("/view")
     public String ResourceView(Model model)
     {
@@ -38,12 +40,14 @@ public class ResourceController {
         return "Resource/ResourceView";
     }
 
+    @PreAuthorize("hasRole('HEAD')")
     @GetMapping("/add")
     public String AddResource(Model model) {
         model.addAttribute("resource", new Resources());
         return "Resource/AddResource";
     }
 
+    @PreAuthorize("hasRole('HEAD')")
     @PostMapping("/add")
     public String addResource(@ModelAttribute("resource") Resources resource,
                               @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate maintenanceDate,
@@ -60,6 +64,7 @@ public class ResourceController {
         return "redirect:/resource/view";
     }
 
+    @PreAuthorize("hasRole('HEAD')")
     @GetMapping("/{id}/edit")
     public String showEditResourceForm(@PathVariable long id, Model model, RedirectAttributes redirectAttributes) {
         Resources resource = resourceService.getResourceById(id);
@@ -71,6 +76,7 @@ public class ResourceController {
         return "Resource/EditResource";
     }
 
+    @PreAuthorize("hasRole('HEAD')")
     @PostMapping("/{id}/edit")
     public String editResource(@PathVariable long id, @ModelAttribute("resource") Resources resource, RedirectAttributes redirectAttributes) {
         resource.setId(id);
@@ -83,6 +89,7 @@ public class ResourceController {
         return "redirect:/resource/view";
     }
 
+    @PreAuthorize("hasRole('HEAD')")
     @GetMapping("/{id}/delete")
     public String deleteResource(@PathVariable long id, RedirectAttributes redirectAttributes) {
         try {
@@ -101,6 +108,7 @@ public class ResourceController {
         return "redirect:/resource/view";
     }
 
+    @PreAuthorize("hasRole('HEAD')")
     @GetMapping("/{id}/assignAgent")
     public String showAssignAgentForm(@PathVariable long id, Model model, RedirectAttributes redirectAttributes) {
         Resources resource = resourceService.getResourceById(id);
@@ -119,6 +127,7 @@ public class ResourceController {
         return "Resource/AssignAgent";
     }
 
+    @PreAuthorize("hasRole('HEAD')")
     @PostMapping("/{id}/assignAgent")
     public String assignAgent(@PathVariable long id, @RequestParam("agentId") long agentId, RedirectAttributes redirectAttributes) {
         boolean success = resourceService.assignResourceToAgent(id, agentId);
@@ -130,6 +139,7 @@ public class ResourceController {
         return "redirect:/resource/view";
     }
 
+    @PreAuthorize("hasRole('HEAD')")
     @GetMapping("/{id}/assignStation")
     public String showAssignStationForm(@PathVariable long id, Model model, RedirectAttributes redirectAttributes) {
         Resources resource = resourceService.getResourceById(id);
@@ -144,6 +154,7 @@ public class ResourceController {
         return "Resource/AssignStation";
     }
 
+    @PreAuthorize("hasRole('HEAD')")
     @PostMapping("/{id}/assignStation")
     public String assignStation(@PathVariable long id, @RequestParam("stationId") long stationId, RedirectAttributes redirectAttributes) {
         boolean success = resourceService.assignResourceToStation(id, stationId);
@@ -155,6 +166,7 @@ public class ResourceController {
         return "redirect:/resource/view";
     }
 
+    @PreAuthorize("hasRole('HEAD')")
     @GetMapping("/{id}/unassign")
     public String unassign(@PathVariable long id, RedirectAttributes redirectAttributes) {
         boolean success = resourceService.unassignResource(id);
@@ -166,6 +178,7 @@ public class ResourceController {
         return "redirect:/resource/view";
     }
 
+    @PreAuthorize("hasRole('HEAD')")
     @GetMapping("/{id}/scheduleMaintenance")
     public String showScheduleMaintenanceForm(@PathVariable long id, Model model, RedirectAttributes redirectAttributes) {
         Resources resource = resourceService.getResourceById(id);
@@ -177,6 +190,7 @@ public class ResourceController {
         return "Resource/ScheduleMaintenance";
     }
 
+    @PreAuthorize("hasRole('HEAD')")
     @PostMapping("/{id}/scheduleMaintenance")
     public String scheduleMaintenance(@PathVariable long id,
                                       @RequestParam("maintenanceDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
@@ -191,6 +205,7 @@ public class ResourceController {
         return "redirect:/resource/view";
     }
 
+    @PreAuthorize("hasRole('HEAD')")
     @GetMapping("/{id}/completeMaintenance")
     public String completeMaintenance(@PathVariable long id, RedirectAttributes redirectAttributes) {
         boolean success = resourceService.completeMaintenance(id);

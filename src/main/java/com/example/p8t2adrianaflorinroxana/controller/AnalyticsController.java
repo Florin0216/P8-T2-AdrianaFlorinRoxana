@@ -1,6 +1,7 @@
 package com.example.p8t2adrianaflorinroxana.controller;
 
 import com.example.p8t2adrianaflorinroxana.service.AnalyticsServiceImpl;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +25,7 @@ public class AnalyticsController {
         this.analyticsService = analyticsService;
     }
 
+    @PreAuthorize("hasRole('AGENT')")
     @GetMapping("/dashboard")
     public String getDashboardData(@RequestParam(required = false) Integer month,
                                    @RequestParam(required = false) Integer year,
@@ -40,6 +42,7 @@ public class AnalyticsController {
         return "Analytics/Dashboard";
     }
 
+    @PreAuthorize("hasRole('AGENT')")
     @GetMapping("/report")
     public String showTrendReport(@RequestParam(required = false) Integer year,
                                   Model model) {
