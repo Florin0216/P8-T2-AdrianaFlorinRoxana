@@ -9,9 +9,14 @@
     <div class="container mt-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h1>Police Stations</h1>
-            <a th:href="@{/station/add}" class="btn btn-primary" th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
-                <i class="bi bi-plus-circle"></i> Add New Station
-            </a>
+            <div class="justify-content-end">
+                <a th:href="@{/station/add}" class="btn btn-primary" th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+                    <i class="fa-solid fa-plus"></i> Add New Station
+                </a>
+                <a th:href="@{/station/export}" class="btn btn-primary" th:if="${#authorization.expression('hasRole(''ADMIN'')')}" download>
+                    <i class="fa-solid fa-download"></i> Export distribution
+                </a>
+            </div>
         </div>
         <div id="map" style="height: 600px; width: 100%;" class="mb-4 rounded"></div>
         <div class="table-responsive">

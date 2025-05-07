@@ -66,6 +66,39 @@
                             </div>
                         </div>
 
+                        <div class="mb-4" th:if="${case.versions != null and !case.versions.isEmpty()}">
+                            <h5>Version History</h5>
+                            <p>This case has been modified <span th:text="${case.versions.size()}">0</span> times.</p>
+                            <a th:href="@{/case/{id}/versions(id=${case.id})}" class="btn btn-outline-secondary">
+                                View Version History
+                            </a>
+                        </div>
+
+                        <div class="mb-4">
+                            <h5>Case Notes</h5>
+                            <div th:if="${case.notes != null and !case.notes.isEmpty()}">
+                                <div class="list-group mb-3">
+                                    <div th:each="note : ${case.notes}" class="list-group-item">
+                                        <div class="d-flex w-100 justify-content-between">
+                                            <p class="mb-1" th:text="${note.content}">Note content</p>
+                                        </div>
+                                        <small class="text-muted">Added by: <span th:text="${note.createdBy.username}">User</span></small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div th:if="${case.notes == null or case.notes.isEmpty()}">
+                                <p class="text-muted">No notes added yet.</p>
+                            </div>
+
+                            <form th:action="@{/case/{id}/add-note(id=${case.id})}" method="post" class="mt-3">
+                                <div class="form-group">
+                                    <label for="noteContent">Add New Note</label>
+                                    <textarea id="noteContent" name="content" class="form-control" rows="3" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Add Note</button>
+                            </form>
+                        </div>
+
                         <div class="d-flex justify-content-between">
                             <a th:href="@{/case/listing}" class="btn btn-outline-secondary">Back to Cases</a>
                             <a th:href="@{/case/{id}/update(id=${case.id})}" class="btn btn-primary">Edit Case</a>

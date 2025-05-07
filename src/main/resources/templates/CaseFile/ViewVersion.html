@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{Shared/_Layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Version Details</title>
+    <style>
+        .version-data {
+            white-space: pre-wrap;
+            font-family: monospace;
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #dee2e6;
+        }
+    </style>
+</head>
+<body>
+<main layout:fragment="body">
+    <div class="container pt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-10 col-lg-8">
+                <div class="card">
+                    <div class="card-body p-4">
+                        <h2 class="text-center mb-4 h4">
+                            Version <span th:text="${version.versionNumber}">1</span> of
+                            <span th:text="${case.caseName}">Case Name</span>
+                        </h2>
+
+                        <div class="mb-4">
+                            <h5>Changes in this version:</h5>
+                            <div class="version-data" th:text="${version.versionData}">
+                                Version data will be displayed here...
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a th:href="@{/case/{id}/versions(id=${case.id})}" class="btn btn-outline-secondary">
+                                Back to Version List
+                            </a>
+                            <a th:href="@{/case/{id}/view(id=${case.id})}" class="btn btn-primary">
+                                Back to Current Case
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

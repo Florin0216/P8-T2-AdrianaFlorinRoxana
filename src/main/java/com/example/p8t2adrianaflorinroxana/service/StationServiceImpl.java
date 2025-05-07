@@ -1,10 +1,13 @@
 package com.example.p8t2adrianaflorinroxana.service;
 
+import com.example.p8t2adrianaflorinroxana.model.Agents;
 import com.example.p8t2adrianaflorinroxana.model.Stations;
 import com.example.p8t2adrianaflorinroxana.repository.StationRepository;
 import org.springframework.stereotype.Service;
 
+import java.io.PrintWriter;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class StationServiceImpl {
@@ -41,4 +44,24 @@ public class StationServiceImpl {
         stationRepository.deleteById(id);
     }
 
+
+    public void exportStationsWithAgentsToCSV(PrintWriter writer, List<Stations> stations, Map<Long, List<Agents>> agentsByStation) {
+        for (Stations station : stations) {
+            writer.printf("%s,%f,%f%n",
+                    station.getStationName(),
+                    station.getLatitude(),
+                    station.getLongitude());
+
+            List<Agents> agents = agentsByStation.get(station.getId());
+            if (agents != null) {
+                for (Agents agent : agents) {
+                    writer.printf(",%s,%s,%s,%s%n",
+                            agent.getFirstName(),
+                            agent.getLastName(),
+                            agent.getRank().name(),
+                            agent.getRank().getCorps().name());
+                }
+            }
+        }
+    }
 }

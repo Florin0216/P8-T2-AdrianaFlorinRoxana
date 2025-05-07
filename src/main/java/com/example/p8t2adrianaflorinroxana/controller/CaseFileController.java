@@ -21,12 +21,14 @@ public class CaseFileController {
     private final StationServiceImpl stationService;
     private final AgentServiceImpl agentService;
     private final UserServiceImpl userService;
+    private final CaseVersionServiceImpl caseVersionService;
 
-    public CaseFileController(CaseFileServiceImpl caseFileService, StationServiceImpl stationService, AgentServiceImpl agentService, UserServiceImpl userService) {
+    public CaseFileController(CaseFileServiceImpl caseFileService, StationServiceImpl stationService, AgentServiceImpl agentService, UserServiceImpl userService, CaseVersionServiceImpl caseVersionService) {
         this.caseFileService = caseFileService;
         this.stationService = stationService;
         this.agentService = agentService;
         this.userService = userService;
+        this.caseVersionService = caseVersionService;
     }
 
     @PreAuthorize("hasRole('AGENT')")
@@ -89,6 +91,7 @@ public class CaseFileController {
 
         CaseFiles caseFile = caseFileService.findCaseFileById(id);
         model.addAttribute("case", caseFile);
+        model.addAttribute("newNote", new CaseNotes());
         return "CaseFile/ViewCase";
     }
 
@@ -113,5 +116,38 @@ public class CaseFileController {
 
         caseFileService.updateCaseFile(caseFiles, loggedUser);
         return "redirect:/case/listing";
+    }
+
+    @PreAuthorize("hasRole('AGENT')")
+    @GetMapping("/{id}/versions")
+    public String viewCaseVersions(@PathVariable Long id, Model model) {
+        CaseFiles caseFile = caseFileService.findCaseFileById(id);
+        model.addAttribute("case", caseFile);
+        model.addAttribute("versions", caseFile.getVersions());
+        return "CaseFile/ListVersions";
+    }
+
+    @PreAuthorize("hasRole('AGENT')")
+    @GetMapping("/{caseId}/versions/{versionId}")
+    public String viewCaseVersionDetails(@PathVariable Long caseId,
+                                         @PathVariable Long versionId,
+                                         Model model) {
+
+        CaseFiles caseFile = caseFileService.findCaseFileById(caseId);
+        CaseVersion version = caseVersionService.findVersionById(versionId);
+
+        model.addAttribute("case", caseFile);
+        model.addAttribute("version", version);
+        return "CaseFile/ViewVersion";
+    }
+
+    @PreAuthorize("hasRole('AGENT')")
+    @PostMapping("/{id}/add-note")
+    public String addNote(@PathVariable Long id,
+                          @RequestParam String content,
+                          Principal principal) {
+        Users loggedUser = userService.getUserByUsername(principal.getName());
+        caseFileService.addNoteToCase(id, content, loggedUser);
+        return "redirect:/case/" + id + "/view";
     }
 }

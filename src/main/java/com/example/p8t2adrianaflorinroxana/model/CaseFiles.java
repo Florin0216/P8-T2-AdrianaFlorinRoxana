@@ -46,6 +46,12 @@ public class CaseFiles {
     @OneToMany(mappedBy = "caseFile", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CaseEvidences> caseEvidences;
 
+    @OneToMany(mappedBy = "caseFile", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<CaseVersion> versions;
+
+    @OneToMany(mappedBy = "caseFile", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<CaseNotes> notes;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "cases_agents",
@@ -148,5 +154,21 @@ public class CaseFiles {
 
     public void setCaseEvidences(List<CaseEvidences> caseEvidences) {
         this.caseEvidences = caseEvidences;
+    }
+
+    public List<CaseVersion> getVersions() {
+        return versions;
+    }
+
+    public void setVersions(List<CaseVersion> versions) {
+        this.versions = versions;
+    }
+
+    public List<CaseNotes> getNotes() {
+        return notes;
+    }
+
+    public void setNotes(List<CaseNotes> notes) {
+        this.notes = notes;
     }
 }

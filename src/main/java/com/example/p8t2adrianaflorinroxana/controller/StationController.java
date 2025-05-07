@@ -5,6 +5,7 @@ import com.example.p8t2adrianaflorinroxana.model.Agents;
 import com.example.p8t2adrianaflorinroxana.model.Stations;
 import com.example.p8t2adrianaflorinroxana.service.AgentServiceImpl;
 import com.example.p8t2adrianaflorinroxana.service.StationServiceImpl;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -12,6 +13,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -95,5 +98,20 @@ public class StationController {
         model.addAttribute("allRanks", AgentRank.values());
 
         return "Station/Hierarchy";
+    }
+
+    @GetMapping("/export")
+    public void exportData(HttpServletResponse response) throws IOException {
+        response.setContentType("text/csv");
+        response.setHeader("Content-Disposition", "attachment; filename=\"station_agent_distribution.csv\"");
+
+        List<Stations> stations = stationService.getAllStations();
+        Map<Long, List<Agents>> agentsByStation = new HashMap<>();
+
+        for (Stations station : stations) {
+            agentsByStation.put(station.getId(), agentService.getAllAgentsForStation(station.getId()));
+        }
+
+        stationService.exportStationsWithAgentsToCSV(response.getWriter(), stations, agentsByStation);
     }
 }
