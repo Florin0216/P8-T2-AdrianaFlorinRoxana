@@ -49,4 +49,22 @@ public class AgentController {
         return "redirect:/station/view";
     }
 
+    @PreAuthorize("hasRole('HEAD')")
+    @GetMapping("/{id}/edit")
+    public String editAgent(@PathVariable long id, Model model) {
+
+        Agents agent = agentService.getAgentById(id);
+        model.addAttribute("agent", agent);
+        return "Agent/editAgent";
+    }
+
+    @PreAuthorize("hasRole('HEAD')")
+    @PostMapping("/{id}/edit")
+    public String updateAgent(@PathVariable long id, @ModelAttribute("agent") Agents updatedAgent) {
+
+        agentService.updateAgent(id, updatedAgent);
+        return "redirect:/station/view";
+    }
+
+
 }

@@ -88,7 +88,7 @@ public class ResourceServiceImpl {
     @Transactional
     public boolean assignResourceToAgent(long resourceId, long agentId) {
         Optional<Resources> resourceOpt = resourceRepository.findById(resourceId);
-        Optional<Agents> agentOpt = agentRepository.findById((int) agentId);
+        Optional<Agents> agentOpt = agentRepository.findById(agentId);
 
         if (resourceOpt.isPresent() && agentOpt.isPresent()) {
             Resources resource = resourceOpt.get();

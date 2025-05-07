@@ -61,4 +61,26 @@ public class AgentServiceImpl {
             agentRepository.save(agent);
         }
     }
+
+    public Agents getAgentById(long id) {
+        return agentRepository.findById(id).orElse(null);
+    }
+
+    public void updateAgent(long id, Agents updatedAgent) {
+        Agents existing = agentRepository.findById(id).orElse(null);
+        if (existing != null) {
+            existing.setFirstName(updatedAgent.getFirstName());
+            existing.setLastName(updatedAgent.getLastName());
+            existing.setGender(updatedAgent.getGender());
+            existing.setDob(updatedAgent.getDob());
+            existing.setCorps(updatedAgent.getCorps());
+            existing.setRank(updatedAgent.getRank());
+            existing.setStatus(updatedAgent.getStatus());
+            existing.setEmail(updatedAgent.getEmail());
+            existing.setPhoneNumber(updatedAgent.getPhoneNumber());
+            existing.setAddress(updatedAgent.getAddress());
+            agentRepository.save(existing);
+        }
+    }
+
 }

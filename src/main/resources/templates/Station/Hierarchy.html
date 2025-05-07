@@ -64,8 +64,12 @@
                               <td th:text="${agent.phoneNumber}"></td>
                               <td th:text="${agent.email}" class="text-truncate"></td>
                               <td>
-                                <span th:switch="${agent.status}">
-                                </span>
+    <span th:switch="${agent.status}">
+        <span th:case="'ON_DUTY'" class="badge bg-success">On Duty</span>
+        <span th:case="'OFF_DUTY'" class="badge bg-secondary">Off Duty</span>
+        <span th:case="'ON_LEAVE'" class="badge bg-warning text-dark">On Leave</span>
+        <span th:case="*" class="badge bg-light text-dark" th:text="${agent.status}">Unknown</span>
+    </span>
                               </td>
                               <td class="text-end" th:if="${#authorization.expression('hasRole(''HEAD'')')}">
                                 <div class="btn-group btn-group-sm" role="group">

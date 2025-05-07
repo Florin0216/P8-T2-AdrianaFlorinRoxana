@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{Shared/_Layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Agent</title>
+</head>
+<body>
+<main layout:fragment="body">
+    <div class="container pt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-7">
+                <div class="card">
+                    <div class="card-body p-4">
+                        <h2 class="text-center mb-4 h4">Edit Agent Information</h2>
+                        <form th:object="${agent}" th:action="@{/agent/{id}/edit(id=${agent.id})}" method="post">
+                            <div class="row">
+                                <div class="mb-3 col-md-6">
+                                    <label for="firstName" class="form-label">First Name:</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fa-solid fa-id-card"></i></span>
+                                        <input type="text" class="form-control" id="firstName"
+                                               placeholder="Enter first name" th:field="*{firstName}" required>
+                                    </div>
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                    <label for="lastName" class="form-label">Last Name:</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fa-solid fa-id-card"></i></span>
+                                        <input type="text" class="form-control" id="lastName"
+                                               placeholder="Enter last name" th:field="*{lastName}" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="mb-3 col-md-6">
+                                    <label for="gender" class="form-label">Gender:</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fa-solid fa-transgender"></i></span>
+                                        <select class="form-select" id="gender" th:field="*{gender}" required>
+                                            <option value="" disabled>Select gender</option>
+                                            <option value="M">Male</option>
+                                            <option value="F">Female</option>
+                                            <option value="O">Other</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                    <label for="dob" class="form-label">Date of Birth:</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fa-solid fa-calendar"></i></span>
+                                        <input type="date" class="form-control" id="dob" name="dob" required
+                                               th:value="${#temporals.format(agent.dob, 'yyyy-MM-dd')}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="mb-3 col-md-6">
+                                    <label for="corps" class="form-label">Corps:</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fa-solid fa-building-shield"></i></span>
+                                        <select class="form-select" id="corps" th:field="*{corps}" required>
+                                            <option value="" disabled>Select corps</option>
+                                            <option value="Officer">Police Officers</option>
+                                            <option value="Agent">Police Agents</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                    <label for="rank" class="form-label">Rank:</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fa-solid fa-ranking-star"></i></span>
+                                        <select class="form-select" id="rank" th:field="*{rank}" required>
+                                            <option value="" disabled>Select rank</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="mb-3 col-md-6">
+                                    <label for="email" class="form-label">Email:</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                        <input type="email" class="form-control" id="email" placeholder="Enter email" th:field="*{email}"
+                                               required>
+                                    </div>
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                    <label for="phone" class="form-label">Phone Number:</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                        <input type="tel" class="form-control" id="phone"
+                                               placeholder="Enter phone number" th:field="*{phoneNumber}" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="address" class="form-label">Address:</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa-solid fa-location-dot"></i></span>
+                                    <input type="text" class="form-control" id="address"
+                                           placeholder="Enter address" th:field="*{address}" required>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Status:</label>
+                                <select class="form-select" th:field="*{status}" required>
+                                    <option value="" disabled>Select status</option>
+                                    <option value="ON_DUTY">On Duty</option>
+                                    <option value="OFF_DUTY">Off Duty</option>
+                                    <option value="ON_LEAVE">On Leave</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Update Agent</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>
