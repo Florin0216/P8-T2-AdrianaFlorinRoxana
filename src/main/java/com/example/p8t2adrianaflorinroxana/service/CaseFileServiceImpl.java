@@ -50,18 +50,9 @@ public class CaseFileServiceImpl {
          return caseFileRepository.findAll();
     }
 
-    public List<CaseFiles> getCaseFilesByCategory(String category) {
-        return caseFileRepository.findAllByCaseCategory(category);
-    }
-
     public List<CaseFiles> getCaseFilesByNameOrAgentName(String fileName, List<Agents> agent) {
 
         return caseFileRepository.findAllByCaseNameOrAgents(fileName, agent);
-    }
-
-    public List<CaseFiles> getCaseFilesByStatus(String status) {
-
-        return caseFileRepository.findAllByStatus(status);
     }
 
     public CaseFiles getCaseFileById(Long id) {
